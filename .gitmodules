@@ -1,0 +1,6 @@
+[submodule "community/externals/jquery"]
+	path = community/externals/jquery
+	url = git://github.com/jquery/jquery.git
+[submodule "community/externals/bootstrap"]
+	path = community/externals/bootstrap
+	url = https://github.com/twitter/bootstrap.git
