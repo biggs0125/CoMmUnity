@@ -3,6 +3,7 @@ from django.views.generic import View
 from events.models import Event
 from datetime import datetime, time, date
 from django.http import HttpResponse
+
 class CreateEvent(View):
 
     def dispatch(self, request, *args, **kwargs):
@@ -23,4 +24,15 @@ class CreateEvent(View):
                 location=self.location)
 
         event.save()
+        return HttpResponse(status=200)
+
+class GetEvent(View):
+
+    def dispatch(self, request, id=None, *args, **kwargs):
+
+        if not request.method == 'GET':
+            return HttpResponse(status=403)
+
+        event = Event.objects.get(pk=id)
+
         return HttpResponse(status=200)
