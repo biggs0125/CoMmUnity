@@ -3,6 +3,7 @@ from django.views.generic import View
 from events.models import Event
 from datetime import datetime, time, date
 from django.http import HttpResponse
+from django.core import serializers
 
 class CreateEvent(View):
 
@@ -34,5 +35,6 @@ class GetEvent(View):
             return HttpResponse(status=403)
 
         event = Event.objects.get(pk=id)
+        serialized_event = serializers.serialize("json", event)
 
-        return HttpResponse(status=200)
+        return HttpResponse(status=200, content=serialized_event, content_type="application/json")
