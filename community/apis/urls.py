@@ -6,6 +6,6 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
         url(r'^event/create/$', views.CreateEvent.as_view(), name='api_event_create'),
-        url(r'^event/retrieve/(?P<id>d+)$', views.CreateEvent.as_view(), name='api_event_retrieve'),
+        url(r'^event/retrieve$', views.GetEvent.as_view(), name='api_event_retrieve'),
 
 )

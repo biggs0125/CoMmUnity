@@ -29,12 +29,25 @@ class CreateEvent(View):
 
 class GetEvent(View):
 
-    def dispatch(self, request, id=None, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
 
         if not request.method == 'GET':
             return HttpResponse(status=403)
+        event = None
+        if 'id' in request.GET:
+            id = request.GET['id']
+            event = Event.objects.get(pk=id)
 
-        event = Event.objects.get(pk=id)
+        elif 'date' in request.GET:
+            date = datetime.strptime(request.GET['date'], '%m-%d-%y')
+            event = Event.objects.filter(datetime__date=date)
+        elif 'start_date' in request.GET and 'end_date' in request.GET:
+            start_date = request.GET['start_date']
+            end_date = request.GET['end_date']
+            event = Event.objects.filter(datetime__gte=start_date, datetime__lte=end_date)
+
+        if event is None:
+            return HttpResponse(status=400)
+
         serialized_event = serializers.serialize("json", event)
-
         return HttpResponse(status=200, content=serialized_event, content_type="application/json")

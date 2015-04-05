@@ -12,4 +12,3 @@ class Event(models.Model):
     tags = models.ManyToManyField(Tag, null=True)
     datetime = models.DateTimeField()
     location = models.CharField(max_length=60)
-    
