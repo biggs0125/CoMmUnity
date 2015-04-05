@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
+    'apis',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -37,7 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'events',
-    'apis',
+    'home',
     'organizations',
     'tags',
     'users'
@@ -89,3 +90,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+TEMPLATES = [
+    {
+      'BACKEND': 'django.template.backends.django.DjangoTemplates',
+      'DIRS': [
+        './templates',
+        '/home/html/example.com',
+        '/home/html/default',
+        ],
+      },
+    {
+      'BACKEND': 'django.template.backends.jinja2.Jinja2',
+      'DIRS': [
+        '/home/html/jinja2',
+        ],
+      },
+    ]
