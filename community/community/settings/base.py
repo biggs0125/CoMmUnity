@@ -58,20 +58,6 @@ ROOT_URLCONF = 'community.urls'
 
 WSGI_APPLICATION = 'community.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/1.7/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'community',
-        'USER': 'server',
-        'PASSWORD': 'password',
-        'HOST':''
-    }
-}
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
@@ -90,19 +76,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
-TEMPLATES = [
-    {
-      'BACKEND': 'django.template.backends.django.DjangoTemplates',
-      'DIRS': [
-        './templates',
-        '/home/html/example.com',
-        '/home/html/default',
-        ],
-      },
-    {
-      'BACKEND': 'django.template.backends.jinja2.Jinja2',
-      'DIRS': [
-        '/home/html/jinja2',
-        ],
-      },
-    ]

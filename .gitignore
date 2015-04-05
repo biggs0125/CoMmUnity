@@ -1,3 +1,4 @@
 .idea
 *~
-settings.py
+pers_settings.py
+*.pyc
