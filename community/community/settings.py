@@ -26,7 +26,6 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = (
@@ -43,6 +42,13 @@ INSTALLED_APPS = (
     'tags',
     'users'
 )
+
+STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, "community/static"),
+            )
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR,  'community/templates'),
+    )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -66,8 +72,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'community',
-        'USER': 'server',
-        'PASSWORD': 'password',
+        'USER': 'postgres',
+        'PASSWORD': 'FunnyM0nk3y',
         'HOST':''
     }
 }
@@ -90,19 +96,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
-TEMPLATES = [
-    {
-      'BACKEND': 'django.template.backends.django.DjangoTemplates',
-      'DIRS': [
-        './templates',
-        '/home/html/example.com',
-        '/home/html/default',
-        ],
-      },
-    {
-      'BACKEND': 'django.template.backends.jinja2.Jinja2',
-      'DIRS': [
-        '/home/html/jinja2',
-        ],
-      },
-    ]

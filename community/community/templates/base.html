@@ -1,10 +1,12 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <title>CoMmUnity</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="../../externals/bootstrap/dist/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" type="text/css" href="../community/static/bootstrap/dist/css/bootstrap.min.css">-->
+    <link rel="stylesheet" type="text/css" href="{% static "bootstrap/dist/css/bootstrap.min.css" %}">
     <style media="screen" type="text/css"> 
       .menu {
           outline: solid black;
@@ -58,8 +60,10 @@
         <div class="clearfix visible-lg"></div>
       </div>
     </div>
-    <script src="../../externals/jquery/src/jquery.js"></script>
-    <script src="../../externals/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="{% static "jquery/src/jquery.js" %}"></script>
+    <!--<script src="../community/static/jquery/src/jquery.js"></script>-->
+    <script src="{% static "bootstrap/dist/js/bootstrap.min.js" %}"></script>
+    <!--<script src="../community/static/bootstrap/dist/js/bootstrap.min.js"></script>-->
   </body>
 
 </html>
