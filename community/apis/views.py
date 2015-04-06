@@ -29,26 +29,43 @@ class CreateEvent(View):
 
 class GetEvent(View):
 
+
+    def handle_id(self, event_id):
+        return [Event.objects.get(pk=event_id)]
+
+    def handle_date_range(self, start_date, end_date):
+        start_date = datetime.strptime(start_date, '%m-%d-%Y')
+        end_date = datetime.strptime(end_date+" 23:59:59", '%m-%d-%Y %H:%M:%S')
+        return Event.objects.filter(datetime__gte=start_date, datetime__lte=end_date)
+
+    def handle_date(self, event_date):
+        return self.handle_date_range(event_date, event_date)
+
+    def handle_params(self, qdict):
+
+        if 'id' in qdict:
+            return self.handle_id(qdict['id'])
+
+        if 'date' in qdict:
+            try:
+                return self.handle_date(qdict['date'])
+            except ValueError:
+                return None
+
+        if 'start_date' in qdict and 'end_date' in qdict:
+            try:
+                return self.handle_date_range(qdict['start_date'], qdict['end_date'])
+            except ValueError:
+                return None
+
+        return None
+
     def dispatch(self, request, *args, **kwargs):
 
         if not request.method == 'GET':
             return HttpResponse(status=403)
 
-        print request.GET
-        event = None
-        if 'id' in request.GET:
-            id = request.GET['id']
-            event = [Event.objects.get(pk=id)]
-
-        elif 'date' in request.GET:
-            start_date = datetime.strptime(request.GET['date'], '%m-%d-%Y')
-            end_date = datetime.strptime(request.GET['date']+" 23:59:59", '%m-%d-%Y %H:%M:%S')
-            event = Event.objects.filter(datetime__gte=start_date, datetime__lte=end_date)
-
-        elif 'start_date' in request.GET and 'end_date' in request.GET:
-            start_date = datetime.strptime(request.GET['start_date'], '%m-%d-%Y')
-            end_date = datetime.strptime(request.GET['end_date']+" 23:59:59", '%m-%d-%Y %H:%M:%S')
-            event = Event.objects.filter(datetime__gte=start_date, datetime__lte=end_date)
+        event = self.handle_params(request.GET)
 
         if event is None:
             return HttpResponse(status=400)
