@@ -7,8 +7,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'community',
-        'USER': 'server',
-        'PASSWORD': 'password',
+        'USER': 'postgres',
+        'PASSWORD': 'FunnyM0nk3y',
         'HOST':''
     }
 }
