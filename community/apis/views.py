@@ -33,17 +33,21 @@ class GetEvent(View):
 
         if not request.method == 'GET':
             return HttpResponse(status=403)
+
+        print request.GET
         event = None
         if 'id' in request.GET:
             id = request.GET['id']
-            event = Event.objects.get(pk=id)
+            event = [Event.objects.get(pk=id)]
 
         elif 'date' in request.GET:
-            date = datetime.strptime(request.GET['date'], '%m-%d-%y')
-            event = Event.objects.filter(datetime__date=date)
+            start_date = datetime.strptime(request.GET['date'], '%m-%d-%Y')
+            end_date = datetime.strptime(request.GET['date']+" 23:59:59", '%m-%d-%Y %H:%M:%S')
+            event = Event.objects.filter(datetime__gte=start_date, datetime__lte=end_date)
+
         elif 'start_date' in request.GET and 'end_date' in request.GET:
-            start_date = request.GET['start_date']
-            end_date = request.GET['end_date']
+            start_date = datetime.strptime(request.GET['start_date'], '%m-%d-%Y')
+            end_date = datetime.strptime(request.GET['end_date']+" 23:59:59", '%m-%d-%Y %H:%M:%S')
             event = Event.objects.filter(datetime__gte=start_date, datetime__lte=end_date)
 
         if event is None:
