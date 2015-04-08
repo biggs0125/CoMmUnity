@@ -8,62 +8,32 @@
     <!--<link rel="stylesheet" type="text/css" href="../community/static/bootstrap/dist/css/bootstrap.min.css">-->
     <link rel="stylesheet" type="text/css" href="{% static "bootstrap/dist/css/bootstrap.min.css" %}">
     <style media="screen" type="text/css"> 
-      .menu {
-          outline: solid black;
-          margin-top: 25px;
-          margin-left: 25px;
-          }
+      html {
+      background: url(../static/images/background.png) no-repeat center center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+      }
     </style>
   </head>
   <body>
-
-    <!-- Navigation bar div-
-    <nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="#">CoMmUnity</a>
-      </div>
-      <div>
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#">Login</a></li>
-          <li><a href="#">Create an Event</a></li>
-          <li><a href="#">Calendar</a></li>
-        </ul>
-      </div>
+    <div class="row">
+      <!-- Top Pill Menu -->
+      <ul class="nav nav-pills">
+        <li class="active"><a href="#">Home</a></li>
+        <li id="login"><a href="#">{% block login %}Login{% endblock %}</a></li>
+        <li id="logout"><a href="#">Logout</a></li>
+      </ul>
     </div>
-    </nav>
-    -->
-    <!-- Title div 
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12">CoMmUnity</div>
-      </div>
+    <div class="col-md-9" id="content">
+      {% block content %}Whatever the fuck you want.{% endblock %} 
     </div>
-    -->
-      <div class="row">
-        <!-- Side pill menu div-->
-        <div class="col-md-2 menu">
-          <img src="header-logo-2.png" 
-             class="img-responsive">
-          <ul class="nav nav-pills nav-stacked">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">Login</a></li>
-            <li><a href="#">Create an Event</a></li>
-            <li><a href="#">Calendar</a></li>
-          </ul>
-        </div>
-        <!-- Body div-->
-        <div class="col-md-9" id="content">
-          {% block content %}Whatever the fuck you want.{% endblock %} 
-        </div>
-        <div class="clearfix visible-lg"></div>
-      </div>
-    </div>
-    <script src="{% static "jquery/src/jquery.js" %}"></script>
-    <!--<script src="../community/static/jquery/src/jquery.js"></script>-->
-    <script src="{% static "bootstrap/dist/js/bootstrap.min.js" %}"></script>
-    <!--<script src="../community/static/bootstrap/dist/js/bootstrap.min.js"></script>-->
-  </body>
+    <div class="clearfix visible-lg"></div>
+<script src="{% static "jquery/src/jquery.js" %}"></script>
+<!--<script src="../community/static/jquery/src/jquery.js"></script>-->
+<script src="{% static "bootstrap/dist/js/bootstrap.min.js" %}"></script>
+<!--<script src="../community/static/bootstrap/dist/js/bootstrap.min.js"></script>-->
+</body>
 
 </html>
