@@ -9,15 +9,6 @@
     <!--<link rel="stylesheet" type="text/css" href="../community/static/bootstrap/dist/css/bootstrap.min.css">-->
     <link rel="stylesheet" type="text/css" href="{% static "bootstrap/dist/css/bootstrap.min.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "style.css" %}">
-    <style media="screen" type="text/css"> 
-      html {
-      background: url(../static/images/background.png) no-repeat center center fixed;
-      -webkit-background-size: cover;
-      -moz-background-size: cover;
-      -o-background-size: cover;
-      background-size: cover;
-      }
-    </style>
   </head>
 
   <body class="clear">
@@ -27,7 +18,6 @@
       <div class="row">
         <!-- Top Pill Menu -->
         <ul class="nav nav-pills pull-right col-md-2">
-          <!--<li class="active"><a href="#">Home</a></li>-->
           <li id="login"><a href="#">Login</a></li>
           <li id="logout"><a href="#">Logout</a></li>
         </ul>
@@ -38,13 +28,13 @@
 
       <div class="row">
         <div class="col-md-3" id="menubar">
-
-          <!-- Create menu bar rectangles -->
-          <div class="menu-rectangle" id="home_button">Home</div>
-          <div class="menu-rectangle" id="events-button">Upcoming Events</div>
-          <div class="menu-rectangle" id="create-button">Create an Event</div>
-          <div class="menu-rectangle" id="about-button">About Us</div>
-
+          <div class="center">
+            <!-- Create menu bar rectangles -->
+            <div class="menu-rectangle" id="home_button">Home</div>
+            <div class="menu-rectangle" id="events-button">Upcoming Events</div>
+            <div class="menu-rectangle" id="create-button">Create an Event</div>
+            <div class="menu-rectangle" id="about-button">About Us</div>
+          </div>
         </div>
 
         <!-- The rest of the page to be filled -->
@@ -56,9 +46,7 @@
     </div>
 
 <script src="{% static "jquery/src/jquery.js" %}"></script>
-<!--<script src="../community/static/jquery/src/jquery.js"></script>-->
 <script src="{% static "bootstrap/dist/js/bootstrap.min.js" %}"></script>
-<!--<script src="../community/static/bootstrap/dist/js/bootstrap.min.js"></script>-->
 
 </body>
 

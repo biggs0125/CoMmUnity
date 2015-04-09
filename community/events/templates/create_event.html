@@ -1,6 +1,27 @@
-<!DOCTYPE html>
-<html>
-    <body>
-        hi
-    </body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="center content-area">
+  <div class="title">
+    CREATE AN EVENT
+  </div>
+  <div class="row" style="margin-top:50px">
+    Event Name:
+    <input type="text" class="form-control form-input">
+  </div>
+  <div class="row">
+    Organization:
+    <div class="dropdown form-input">
+      <button class="btn btn-default dropdown-toggle"
+              type="button" data-toggle="dropdown">
+        Select Organization
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li><a href="#">Org 1</a></li>
+        <li><a href="#">Org 2</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
