@@ -44,10 +44,10 @@ INSTALLED_APPS = (
 )
 
 STATICFILES_DIRS = (
-        os.path.join(BASE_DIR, "community/static"),
+        os.path.join(BASE_DIR, "static"),
             )
 TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR,  'community/templates'),
+    os.path.join(BASE_DIR,  'templates'),
     )
 
 MIDDLEWARE_CLASSES = (
