@@ -5,22 +5,66 @@
   <div class="title">
     CREATE AN EVENT
   </div>
-  <div class="row" style="margin-top:50px">
-    Event Name:
-    <input type="text" class="form-control form-input">
-  </div>
-  <div class="row">
-    Organization:
-    <div class="dropdown form-input">
-      <button class="btn btn-default dropdown-toggle"
-              type="button" data-toggle="dropdown">
-        Select Organization
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu">
-        <li><a href="#">Org 1</a></li>
-        <li><a href="#">Org 2</a></li>
+  <div class="col-md-7" style="text-align:lieft;margin-left:10%;">
+    <div class="row" style="margin-top:50px">
+      Event Name:
+      <input id="event-name" type="text" class="form-control form-input">
+    </div>
+    <div class="row">
+      Organization:
+      <div class="dropdown form-input">
+        <button id="organization" class="btn btn-default dropdown-toggle"
+                type="button" data-toggle="dropdown">
+          Select Organization
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" style="margin-top:10px;" role="menu">
+          <li><a tabindex="-1" href="#">Org 1</a></li>
+          <li><a tabindex="-1" href="#">Org 2</a></li>
       </ul>
+      </div>
+    </div>
+    <div class="row">
+      Date and Time:
+      <div class="col-sm-6">
+        <div class="form-group">
+          <div class='input-group date' id='dtpicker'>
+            <input type='text' class="form-control">
+            <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+          </div>
+        </div>
+        <script type="text/javascript">
+          $(function () {
+          $('#dtpicker').datetimepicker();
+          });
+        </script>
+      </div>
+    </div>
+    <div class="row">
+      Location:
+      <input id="location" type="text" class="form-control form-input">
+    </div>
+    <div class="row">
+      Tags:
+      <div class="dropdown form-input">
+        <button id="tags" class="btn btn-default dropdown-toggle" type="button"
+                data-toggle="dropdown">
+          Select Tags
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" style="margin-top:10px;" role="menu">
+          <li><a tabindex="-1" href="#">Tag 1</a></li>
+          <li><a tabindex="-1" href="#">Tag 2</a></li>
+          <li role="presentation" class="divide"></li>
+          <li><a tabindex="-1" href="#">New...</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+      Description:
+      <textarea id="description" class="form-control"></textarea>
     </div>
   </div>
 </div>
