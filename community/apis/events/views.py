@@ -36,6 +36,7 @@ class CreateEvent(View):
 
         event.save()
         event.tags = tags_list
+        event.save()
         return CORSHttpResponse(status=200)
 
 class GetEvent(View):
