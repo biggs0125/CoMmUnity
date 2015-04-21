@@ -5,6 +5,6 @@ from calendars import views
 admin.autodiscover()
 
 urlpatterns = patterns('',
-        url(r'^$', views.CreateEvent.as_view(), name='calendars'),
+    url(r'^$', views.DisplayCalendar.as_view(), name='calendars'),
 )
 
