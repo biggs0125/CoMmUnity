@@ -10,5 +10,5 @@ urlpatterns = patterns('',
     url(r'^api/', include('apis.urls')),
     url(r'^event/', include('events.urls')),
     url(r'^home/', include('home.urls')),
-    url(r'^calendars/', include('calendars.urls'))
+    url(r'^calendar/', include('calendars.urls'))
 )
