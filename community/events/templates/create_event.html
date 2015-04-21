@@ -30,8 +30,8 @@
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" style="margin-top:10px;" role="menu">
-          <li><a tabindex="-1" href="#">Org 1</a></li>
-          <li><a tabindex="-1" href="#">Org 2</a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Org 1</a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Org 2</a></li>
       </ul>
       </div>
     </div>
@@ -54,7 +54,6 @@
           $(function () {
               console.log($('#dtpicker'));
               $('#dtpicker').datetimepicker();
-              
           });
         </script>
       </div>

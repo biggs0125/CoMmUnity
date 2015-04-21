@@ -1,17 +1,18 @@
 $(document).ready(function() {
   $("#submit").click(function() {
     alert("Hello!"); 
+    console.log('name:' + $("#event-name").val());
     $.ajax({
       url: "http://localhost:8000/api/event/create",
       method: "POST",
       data: {
-        name: $("#event-name").text(),
-      location: $("#location").text(),
-      description: $("#description").text(),
-      date: $("#dtpicker").text(),
-      time: $("#dtpicker").text(), // uhh..gotta changed this
+        name: $("#event-name").val(),
+      location: $("#location").val(),
+      description: $("#description").val(),
+      date: $("#dtpicker").val().split(' ')[0],
+      time: $("#dtpicker").val().split(' ')[1], 
       tag: $("#tags").val(),
-      organization: $("#organization").val()
+      //organization: $("#organization").val()
       },
       error: function (){
                alert("Congrats you failed!");
