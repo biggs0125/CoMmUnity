@@ -1,17 +1,17 @@
-from django.shortcuts import render
 from django.views.generic import View
 from events.models import Event
 from tags.models import Tag
-from datetime import datetime, time, date
-from django.http import HttpResponse
+from datetime import datetime
 from django.core import serializers
+from apis.CORSHttp import CORSHttpResponse
+
 
 class CreateEvent(View):
 
     def dispatch(self, request, *args, **kwargs):
 
         if not request.method == 'POST':
-            return HttpResponse(status=403)
+            return CORSHttpResponse(status=403)
 
         self.name = request.POST['name']
         self.date = request.POST['date']
@@ -19,12 +19,12 @@ class CreateEvent(View):
         self.location = request.POST['location']
         self.description = request.POST['description']
         self.tags = request.POST.getlist('tag')
-        
+
         try:
             date_obj = datetime.strptime(self.date, '%Y-%m-%d')
             time_obj = datetime.strptime(self.time, '%H:%M')
         except ValueError:
-            return HttpResponse(status=400)
+            return CORSHttpResponse(status=400)
 
 
         tags_list = [Tag.objects.get_or_create(name=tag)[0] for tag in self.tags]
@@ -36,7 +36,7 @@ class CreateEvent(View):
 
         event.save()
         event.tags = tags_list
-        return HttpResponse(status=200)
+        return CORSHttpResponse(status=200)
 
 class GetEvent(View):
 
@@ -80,12 +80,13 @@ class GetEvent(View):
     def dispatch(self, request, *args, **kwargs):
 
         if not request.method == 'GET':
-            return HttpResponse(status=403)
+            return CORSHttpResponse(status=403)
 
         event = self.handle_params(request.GET)
+        #print vars(event)
 
         if event is None:
-            return HttpResponse(status=400)
+            return CORSHttpResponse(status=400)
 
         serialized_event = serializers.serialize("json", event)
-        return HttpResponse(status=200, content=serialized_event, content_type="application/json")
+        return CORSHttpResponse(status=200, content=serialized_event, content_type="application/json")
