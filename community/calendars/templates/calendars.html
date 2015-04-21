@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="center content-area" id='calendar'></div>
+// This script might not belong here...
+<script type='text/javascript'>
+  $(document).ready(function() {
+  $('#calendar').fullCalendar({
+
+  })
+  });
+</script>
+
+{% endblock %}
