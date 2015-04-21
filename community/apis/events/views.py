@@ -46,7 +46,7 @@ class GetEvent(View):
 
     def handle_date_range(self, start_date, end_date):
         start_date = datetime.strptime(start_date, '%Y-%m-%d')
-        end_date = datetime.strptime(end_date+" 23:59:59", '%Y-%m-%d %H:%M:%S')
+        end_date = datetime.strptime(end_date+" 23:59:59 EST", '%Y-%m-%d %H:%M:%S %Z')
         return Event.objects.filter(datetime__gte=start_date, datetime__lte=end_date)
 
     def handle_date(self, event_date):
