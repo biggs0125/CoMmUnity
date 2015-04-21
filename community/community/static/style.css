@@ -42,6 +42,29 @@ body {
     margin-left: 70%;
 }
 
+.submit-rectangle {
+  width: 100px;
+  height: 50px;
+  background-color: #000000;
+  color: white;
+  opacity: 0.75;
+  margin: 10px;
+  padding-top: 13px;
+  font-size: 18px;
+}
+
+.submit-rectangle:hover {
+    opacity: 1.0;
+}
+
+.submit-rectangle.left {
+    margin-left: 40%
+}
+.submit-rectangle.right {
+    margin-left: 70%;
+}
+
+
 .center {
     position: relative;
     width: 80%;

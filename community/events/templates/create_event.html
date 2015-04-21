@@ -1,32 +1,47 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <div class="center content-area">
   <div class="title">
     CREATE AN EVENT
   </div>
-  <div class="col-md-7" style="text-align:lieft;margin-left:10%;">
+  <div class="col-md-8" style="text-align:left;margin-left:10%;">
+    
+    <!-- Tag Row --> 
     <div class="row" style="margin-top:50px">
+      <div class="col-md-4">
       Event Name:
-      <input id="event-name" type="text" class="form-control form-input">
+      </div>
+      <div class="col-md-6">
+        <input id="event-name" type="text" class="form-control form-input">
+      </div>
     </div>
+    
+    <!-- Organization Row --> 
     <div class="row">
+      <div class="col-md-4">
       Organization:
-      <div class="dropdown form-input">
+      </div>
+      <div class="col-md-6 dropdown form-input">
         <button id="organization" class="btn btn-default dropdown-toggle"
                 type="button" data-toggle="dropdown">
           Select Organization
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" style="margin-top:10px;" role="menu">
-          <li><a tabindex="-1" href="#">Org 1</a></li>
-          <li><a tabindex="-1" href="#">Org 2</a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Org 1</a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Org 2</a></li>
       </ul>
       </div>
     </div>
+
+    <!-- Date and Time Row --> 
     <div class="row">
+      <div class="col-md-4">
       Date and Time:
-      <div class="col-sm-6">
+      </div>
+      <div class="col-md-6">
         <div class="form-group">
           <div class='input-group date' id='dtpicker'>
             <input type='text' class="form-control">
@@ -37,35 +52,61 @@
         </div>
         <script type="text/javascript">
           $(function () {
-          $('#dtpicker').datetimepicker();
+              console.log($('#dtpicker'));
+              $('#dtpicker').datetimepicker();
           });
         </script>
       </div>
     </div>
+
+    <!-- Location Row --> 
     <div class="row">
+      <div class="col-md-4">
       Location:
-      <input id="location" type="text" class="form-control form-input">
-    </div>
-    <div class="row">
-      Tags:
-      <div class="dropdown form-input">
-        <button id="tags" class="btn btn-default dropdown-toggle" type="button"
-                data-toggle="dropdown">
-          Select Tags
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" style="margin-top:10px;" role="menu">
-          <li><a tabindex="-1" href="#">Tag 1</a></li>
-          <li><a tabindex="-1" href="#">Tag 2</a></li>
-          <li role="presentation" class="divide"></li>
-          <li><a tabindex="-1" href="#">New...</a></li>
-        </ul>
+      </div>
+      <div class="col-md-6">
+        <input id="location" type="text" class="form-control form-input">
       </div>
     </div>
+
+    <!-- Tag Row --> 
     <div class="row">
-      Description:
-      <textarea id="description" class="form-control"></textarea>
+      <div class="col-md-4">
+      Tags:
+      </div>
+      <div class="col-md-6">
+        <div class="dropdown form-input">
+          <button id="tags" class="btn btn-default dropdown-toggle" type="button"
+            data-toggle="dropdown">
+            Select Tags:
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" style="margin-top:10px;" role="menu">
+            <li><a tabindex="-1" href="#">Tag 1</a></li>
+            <li><a tabindex="-1" href="#">Tag 2</a></li>
+            <li role="presentation" class="divide"></li>
+            <li><a tabindex="-1" href="#">New...</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
+
+    <!-- Description Row --> 
+    <div class="row">
+      <div class="col-md-4">
+      Description:
+      </div>
+      <div class="col-md-8">
+        <textarea id="description" class="form-control"></textarea>
+      </div>
+    </div>
+
+    <!-- Description Row --> 
+    <div class="row" style="text-align:center">
+      <div class="submit-rectangle" id="submit">Submit</div>
+    </div>
+
   </div>
 </div>
+
 {% endblock %}
