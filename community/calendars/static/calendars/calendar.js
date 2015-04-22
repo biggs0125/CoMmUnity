@@ -6,7 +6,8 @@ $(document).ready(function() {
 	    success: function(events) {
 		for (var i=0;i<events.length;i++) {
 		    events[i] = events[i]['fields'];
-		    events[i]['start'] = events[i]['datetime'];
+		    events[i]['start'] = events[i]['start_datetime'];
+		    events[i]['end'] = events[i]['end_datetime'];
 		}
 	    },
             error: function() {
