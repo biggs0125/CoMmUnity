@@ -19,8 +19,8 @@ $(document).ready(function() {
 	},
 	eventRender: function(event, element) {
 	    $(element).append(event['name']);
-	    $(element).hover(function() {
-		
+	    $(element).tooltip({
+		    content: event['description'],
 	    });
 	},
 	header: {
