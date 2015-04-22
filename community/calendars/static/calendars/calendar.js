@@ -18,9 +18,12 @@ $(document).ready(function() {
 	    endParam: 'end_date'
 	},
 	eventRender: function(event, element) {
+	    
 	    $(element).append(event['name']);
 	    $(element).tooltip({
-		    content: event['description'],
+		html: true,
+		title: "Description: "+event['description']+"<br>"+"Start: "+moment(event['start']).format("LL h:MM")+"<br>"+"End: "+moment(event['end']).format("LL h:MM"),
+		trigger: 'hover'
 	    });
 	},
 	header: {
