@@ -36,6 +36,9 @@ class CreateEvent(View):
         start_datetime_obj = datetime.combine(start_date_obj.date(), start_time_obj.time())
         end_datetime_obj = datetime.combine(end_date_obj.date(), end_time_obj.time())
 
+        if end_datetime_obj < start_datetime_obj:
+            return CORSHttpResponse(status=400)
+
         event = Event(name=self.name, start_datetime=start_datetime_obj, end_datetime=end_datetime_obj,
                       description=self.description, location=self.location)
 
@@ -52,7 +55,7 @@ class GetEvent(View):
     def handle_date_range(self, start_date, end_date):
         start_date = datetime.strptime(start_date, '%Y-%m-%d')
         end_date = datetime.strptime(end_date+" 23:59:59", '%Y-%m-%d %H:%M:%S')
-        return Event.objects.filter(datetime__gte=start_date, datetime__lte=end_date)
+        return Event.objects.filter(start_datetime__gte=start_date, start_datetime__lte=end_date)
 
     def handle_date(self, event_date):
         return self.handle_date_range(event_date, event_date)
