@@ -14,32 +14,37 @@ class CreateEvent(View):
             return CORSHttpResponse(status=403)
 
         self.name = request.POST['name']
-        self.date = request.POST['date']
-        self.time = request.POST['time']
+        self.start_date = request.POST['start_date']
+        self.start_time = request.POST['start_time']
+        self.end_date = request.POST['end_date']
+        self.end_time = request.POST['end_time']
         self.location = request.POST['location']
         self.description = request.POST['description']
         self.tags = request.POST.getlist('tag')
 
         try:
-            date_obj = datetime.strptime(self.date, '%Y-%m-%d')
-            time_obj = datetime.strptime(self.time, '%H:%M')
+            start_date_obj = datetime.strptime(self.start_date, '%Y-%m-%d')
+            start_time_obj = datetime.strptime(self.start_time, '%H:%M')
+            end_date_obj = datetime.strptime(self.end_date, '%Y-%m-%d')
+            end_time_obj = datetime.strptime(self.end_time, '%H:%M')
         except ValueError:
             return CORSHttpResponse(status=400)
 
 
         tags_list = [Tag.objects.get_or_create(name=tag)[0] for tag in self.tags]
 
-        datetime_obj = datetime.combine(date_obj.date(), time_obj.time())
-        event = Event(name=self.name, datetime=datetime_obj, description=self.description,
-                location=self.location)
+        start_datetime_obj = datetime.combine(start_date_obj.date(), start_time_obj.time())
+        end_datetime_obj = datetime.combine(end_date_obj.date(), end_time_obj.time())
 
+        event = Event(name=self.name, start_datetime=start_datetime_obj, end_datetime=end_datetime_obj,
+                      description=self.description, location=self.location)
 
         event.save()
         event.tags = tags_list
+        event.save()
         return CORSHttpResponse(status=200)
 
 class GetEvent(View):
-
 
     def handle_id(self, event_id):
         return [Event.objects.get(pk=event_id)]
