@@ -27,20 +27,29 @@ class AddSubscriptions(View):
     def dispatch(self, request, *args, **kwargs):
 
         if not request.method == 'POST':
-            return CORSHttpResponse(status=403)
+            return CORSHttpResponse(status=404)
 
         self.username = request.POST['username']
         self.tags = request.POST.getlist('tag')
 
+        try:
+            user = User.objects.get(username=self.username)
+        except ObjectDoesNotExist:
+            return CORSHttpResponse(status=403)
+
+        tag_objs = []
         for tag in self.tags:
             try:
-                Tag.objects.get(name=tag)
+                tag_objs.append(Tag.objects.get(name=tag))
             except ObjectDoesNotExist:
                 return CORSHttpResponse(status=404)
 
-        # TODO: IMPLEMENT THIS!!
+        for tag in tag_objs:
+            user.subscriptions.add(tag)
 
-        return CORSHttpResponse(status=501)
+        user.save()
+
+        return CORSHttpResponse(status=200)
 
 
 class GetSubscriptions(View):
@@ -50,6 +59,13 @@ class GetSubscriptions(View):
         if not request.method == 'GET':
             return CORSHttpResponse(status=403)
 
-        return CORSHttpResponse(state=501)
+        self.username = request.GET['username']
 
-        # TODO: IMPLEMENT THIS!!
+        try:
+            user = User.objects.get(username=self.username)
+        except ObjectDoesNotExist:
+            return CORSHttpResponse(status=404)
+
+        subs = [tag.name for tag in user.subscriptions.all()]
+        serialized_response = JsonResponse({"tags": subs}, safe=False)
+        return CORSHttpResponse(status=200, content=serialized_response, content_type="application/json")

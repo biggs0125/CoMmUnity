@@ -10,5 +10,6 @@ class Event(models.Model):
     attendees = models.ManyToManyField(User)
     hosts = models.ManyToManyField(Organization)
     tags = models.ManyToManyField(Tag)
-    datetime = models.DateTimeField()
+    start_datetime = models.DateTimeField(null=True)
+    end_datetime = models.DateTimeField(null=True)
     location = models.CharField(max_length=60)
