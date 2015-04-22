@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 
+{% load staticfiles %}
 {% block content %}
-
+<link rel="stylesheet" type="text/css" href="{% static "events/jquery.timepicker.css" %}">
+<script type="text/javascript" src="{% static "events/create_event.js" %}"></script>
+<script type="text/javascript" src="{% static "events/jquery.timepicker.min.js" %}"></script>
 <div class="center content-area">
   <div class="title">
     CREATE AN EVENT
@@ -36,26 +39,53 @@
       </div>
     </div>
 
-    <!-- Date and Time Row --> 
+    <!-- Start Date and Time Row --> 
     <div class="row">
       <div class="col-md-4">
-      Date and Time:
+	Start date:
       </div>
       <div class="col-md-6">
         <div class="form-group">
-          <div class='input-group date' id='dtpicker'>
-            <input type='text' class="form-control">
-            <span class="input-group-addon">
-              <span class="glyphicon glyphicon-calendar"></span>
-            </span>
+          <div class='input-group date'>
+            <input type='text' class="form-control" id='start_date'>
           </div>
         </div>
-        <script type="text/javascript">
-          $(function () {
-              console.log($('#dtpicker'));
-              $('#dtpicker').datetimepicker();
-          });
-        </script>
+      </div>
+      <div class="col-md-14">
+	Start time:
+      </div>
+      <div class="col-md-16">
+        <div class="form-group">
+          <div class="input-group">
+            <input type="text" class="form-control" id="start_time">
+          </div>
+        </div>
+      </div>
+      <script type="text/javascript">
+      </script>
+    </div>
+
+    <!-- End Date and Time Row --> 
+    <div class="row">
+      <div class="col-md-4">
+	End date:
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <div class='input-group date'>
+            <input type='text' class="form-control" id="end_date">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-14">
+	End time:
+      </div>
+      <div class="col-md-16">
+        <div class="form-group">
+          <div class='input-group date'>
+            <input type='text' class="form-control" id="end_time">
+          </div>
+        </div>
       </div>
     </div>
 
@@ -90,7 +120,7 @@
         </div>
       </div>
     </div>
-
+    <br>
     <!-- Description Row --> 
     <div class="row">
       <div class="col-md-4">

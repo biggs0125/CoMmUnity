@@ -1,5 +1,9 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
+<link rel="stylesheet" type="text/css" href="{% static "fullcalendar.min.css" %}">
+<script src="{% static "fullcalendar.min.js" %}"></script>
+<script src="{% static "calendar.js" %}"></script>
 {% block content %}
   <div class="content-area" id="calendar"></div>
 {% endblock %}
