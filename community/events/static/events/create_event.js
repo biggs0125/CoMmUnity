@@ -23,29 +23,41 @@ $(document).ready(function() {
 	}
 	return hour+":"+minute;
     }
-    $("#submit").click(function() {
-	console.log(parseTime($("#start_time").val()));
-	$.ajax({
+
+    // Create data to be sent in POST request
+    function eventDataCreate() {
+        jQuery.ajaxSettings.traditional = true;
+        var data = {
+	    name: $("#event-name").val(),
+      	    location: $("#location").val(),
+	    description: $("#description").val(),
+	    start_date: moment($("#start_date").val()).format('YYYY-MM-DD'),
+	    start_time: parseTime($("#start_time").val()), 
+	    end_date: moment($("#end_date").val()).format('YYYY-MM-DD'),
+	    end_time: parseTime($("#end_time").val()), 
+	    'tag': $('#tag').val().split(' '),
+        };
+        return data;
+    }
+
+    // Creates object to pass into POST request made by ajax
+    function eventPostObjectCreate() {
+        var post = {
 	    url: "http://localhost:8000/api/event/create",
 	    method: "POST",
-	    data: {
-		name: $("#event-name").val(),
-		location: $("#location").val(),
-		description: $("#description").val(),
-		start_date: moment($("#start_date").val()).format('YYYY-MM-DD'),
-		start_time: parseTime($("#start_time").val()), 
-		end_date: moment($("#end_date").val()).format('YYYY-MM-DD'),
-		end_time: parseTime($("#end_time").val()), 
-		//tag: $("#tags").val(),
-		//organization: $("#organization").val()
-	    },
+	    data: eventDataCreate(),
 	    success: function () {
 		window.location.pathname = "/calendar";
 	    },
 	    error: function() {
 		alert("One or more fields were incorrect or blank.");
 	    }
-	});
+	};
+        return post;
+    }
+
+    $("#submit").click(function() {
+	$.ajax(eventPostObjectCreate()); // Send post request
 	
     });
 });
