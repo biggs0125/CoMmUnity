@@ -1,3 +1,4 @@
+cur_filt = '';
 $(document).ready(function() {
 
     // Get the tag names via GET request and append them to
@@ -9,7 +10,7 @@ $(document).ready(function() {
         // If there are no tags, don't make a request to the server
         if (tagIds.length == 0) {
             desc += 'None';
-            callback(event, desc);
+            callback(event, desc, []);
             return;
         }
 
@@ -27,7 +28,7 @@ $(document).ready(function() {
                     desc += tagNames[i]['fields']['name'] + ", ";
                 }
                 desc += tagNames[tagNames.length-1]['fields']['name'];
-                callback(event, desc); 
+                callback(event, desc, tagNames); 
             },
             error: function() {
                 //alert("Bad tag IDs");
@@ -67,8 +68,22 @@ $(document).ready(function() {
 	eventRender: function(event, element) {
 	    //console.log(event); 
             var desc;
-            printDesc(event, desc, function(event, desc) {
+            printDesc(event, desc, function(event, desc, tags) {
 	        $(element).append(event['name']);
+                //console.log(tags);
+                $(element).attr('tag', '');
+                var tagFound = false;
+                for (var i = 0; i < tags.length; i++) {
+                  $(element).attr('tag', $(element).attr('tag') + tags[i]['fields']['name'] + ' ');
+                  if (tags[i]['fields']['name'] == cur_filt || 
+                      cur_filt == '') {
+                      tagFound = true;
+                      //$(element).hide();
+                  }
+                }
+                if (!tagFound && (tags.length != 0 || cur_filt != '')) {
+                    $(element).hide();
+                }
 	        $(element).tooltip({
 		    html: true,
                     title: desc,
@@ -82,4 +97,16 @@ $(document).ready(function() {
 	    right: 'today prev,next month,agendaWeek,agendaDay'
 	}
     })
+
+    $("#filter_button").click(function() {
+	var filt = $("#filter").val();
+        cur_filt = filt;
+        $(".fc-event").hide(); // Hide all
+        $.each($(".fc-event"), function(i, x) {
+          //console.log($(x).attr('tag').split(' ').indexOf(filt) >= 0); 
+          if ($(x).attr('tag').split(' ').indexOf(filt) >= 0) {
+              $(x).show(); // Show just the ones with the tags
+          }
+        });
+    });
 });
