@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+class CreateEvent(TemplateView):
+      template_name = 'create_organization.html'
