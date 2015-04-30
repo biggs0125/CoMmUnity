@@ -4,7 +4,8 @@ from organizations.models import Organization
 from tags.models import Tag
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
-from users.models import User
+from users.models import OurUser
+from slugify import slugify
 
 
 class CreateOrganization(View):
@@ -15,13 +16,14 @@ class CreateOrganization(View):
             return CORSHttpResponse(status=403)
 
         self.name = request.POST['name']
-        self.admins = request.POST.getlist('admin')
-
-
-        Tag.objects.get_or_create(name=self.name)
-
+        self.admins = request.POST.getlist('admins')
+        self.tagname = slugify(self.name, separator="_")
+        Tag.objects.get_or_create(name=self.tagname)
+        admin_objects = []
         try:
-            admin_objects = [User.objects.get(username=admin_name) for admin_name in self.admins]
+            for admin_name in self.admins:
+                admin, created = OurUser.objects.get_or_create(username=admin_name)
+                admin_objects.append(admin)
         except ObjectDoesNotExist:
             # One or more of the Users given does not exist, HTTP 400 - bad request
             return CORSHttpResponse(status=400)

@@ -9,20 +9,14 @@
     <link rel="stylesheet" type="text/css" href="{% static "bootstrap/dist/css/bootstrap.min.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "css/jquery-ui.css" %}">
-    <!-- For Chosen -->
-    <!--<link rel="stylesheet" type="text/css" href="{% static "chosen-1.4.2/public/docsupport/style.css" %}">-->
-    <link rel="stylesheet" type="text/css" href="{% static "chosen-1.4.2/public/docsupport/prism.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "chosen-1.4.2/public/chosen.css" %}">
 
     <script src="{% static "js/jquery-2.1.3.min.js" %}"></script>
     <script src="{% static "js/moment/moment.js" %}"></script>
     <script src="{% static "js/jquery-ui.js" %}"></script>
     <script src="{% static "bootstrap/dist/js/bootstrap.min.js" %}"></script>
-    <!-- For Chosen -->
-    <script src="{% static "chosen-1.4.2/public/chosen.jquery.js" %}"></script>
-    <script src="{% static "chosen-1.4.2/public/docsupport/prism.js" %}"></script>
-    {% if request.session.user_info %}
-    <script>var USERNAME = "{{ request.session.user_info.username }}";</script>
+
+    {% if request.session.user %}
+    <script>var USERNAME = "{{ request.session.user.username }}";</script>
     {% endif %}
   </head>
 
@@ -33,8 +27,8 @@
       <div class="row">
         <!-- Top Pill Menu -->
         <ul class="nav nav-pills pull-right col-md-2">
-          {% if request.session.user_info %}
-	  <li id="welcome"><h4>Hello {{request.session.user_info.name}}</h4></li>
+          {% if request.session.user %}
+	  <li id="welcome"><h4>Hello {{request.session.user.get_full_name}}</h4></li>
 	  <li id="logout"><a href={% url "logout" %}>Logout</a></li>
 	  {% else %}
 	  <li id="login"><a href={% url "socialauth_begin" "google-oauth2" %}>Login</a></li>
@@ -47,8 +41,10 @@
             <!-- Create menu bar rectangles -->
             <div class="menu-rectangle" id="home-button"><a href="/home">Home</a></div>
             <div class="menu-rectangle" id="events-button"><a href="/calendar">Upcoming Events</a></div>
+            {% if request.session.user %}
             <div class="menu-rectangle" id="create-button"><a href="/event/create">Create Event</a></div>
             <div class="menu-rectangle" id="create-button"><a href="/organization/create">Create Organization</a></div>
+	    {% endif %}
             <div class="menu-rectangle" id="about-button">About Us</div>
           </div>
         </div>

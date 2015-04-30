@@ -57,6 +57,9 @@ TEMPLATE_DIRS = (
 
 LOGIN_URL = "/home/"
 LOGIN_REDIRECT_URL = "/home/"
+SOCIAL_AUTH_DISCONNECT_REDIRECT_URL = '/home/'
+
+SOCIAL_AUTH_USER_MODEL = 'users.OurUser'
 
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.google.GoogleOAuth2Backend',
@@ -101,6 +104,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 ROOT_URLCONF = 'community.urls'
 

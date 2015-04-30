@@ -1,6 +1,7 @@
 from django.views.generic import View
-from users.models import User
+from users.models import OurUser
 from tags.models import Tag
+from events.models import Event
 from django.core import serializers
 from apis.CORSHttp import CORSHttpResponse
 from django.core.exceptions import ObjectDoesNotExist
@@ -16,7 +17,7 @@ class GetUser(View):
 
         if 'username' in request.POST:
             username = request.POST['username']
-            user_obj, created = User.objects.get_or_create(username=username)
+            user_obj, created = OurUser.objects.get_or_create(username=username)
 
             json_response = JsonResponse({"new" : created})
             return CORSHttpResponse(status=200, content=json_response.content, content_type="application/json")
@@ -33,7 +34,7 @@ class AddSubscriptions(View):
         self.tags = request.POST.getlist('tag')
 
         try:
-            user = User.objects.get(username=self.username)
+            user = OurUser.objects.get(username=self.username)
         except ObjectDoesNotExist:
             return CORSHttpResponse(status=403)
 
@@ -58,14 +59,37 @@ class GetSubscriptions(View):
 
         if not request.method == 'GET':
             return CORSHttpResponse(status=403)
-
-        self.username = request.GET['username']
+        
+        if 'username' in request.GET.keys():
+            self.username = request.GET['username']
+        else:
+           return CORSHttpResponse(status=400) 
 
         try:
-            user = User.objects.get(username=self.username)
+            user = OurUser.objects.get(username=self.username)
         except ObjectDoesNotExist:
             return CORSHttpResponse(status=404)
 
         subs = [tag.name for tag in user.subscriptions.all()]
         serialized_response = JsonResponse({"tags": subs}, safe=False)
+        return CORSHttpResponse(status=200, content=serialized_response, content_type="application/json")
+
+class GetAttending(View):
+    
+    def dispatch(self, request, *args, **kwargs):
+    
+        if not request.method == 'GET':
+            return CORSHttpResponse(status=403)
+        
+        if 'username' in request.GET.keys():
+            try:
+                user = OurUser.objects.get(username=request.GET['username'])
+            except ObjectDoesNotExist:
+                return CORSHttpResponse(status=404)
+        else:
+            return CORSHttpResponse(status=400)
+        
+        events = Event.objects.filter(attendees__id__exact=user.pk)
+        serialized_response = serializers.serialize("json", events)
+
         return CORSHttpResponse(status=200, content=serialized_response, content_type="application/json")

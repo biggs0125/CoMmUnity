@@ -1,8 +1,23 @@
 $(document).ready(function() {
+
     $('#start_date').datepicker();
     $('#start_time').timepicker();
     $('#end_date').datepicker();
     $('#end_time').timepicker();
+    $('#orgs').chosen();
+
+    $.ajax({
+	method: 'GET',
+	url: "http://localhost:8000/api/organization/retrieve",
+	data: {'admin': USERNAME},
+	success: function(data) {
+	    for (var i=0; i < data.length; i++) {
+		var name = data[i]['fields']['name'];
+		$("#orgs").append("<option value='"+name+"'>"+name+"</option>");
+	    }
+	    $("#orgs").trigger("chosen:updated");
+	},
+    });
 
     function parseTime(d) {
 	var ampm = d.slice(-2);
@@ -38,6 +53,7 @@ $(document).ready(function() {
 	    end_time: parseTime($("#end_time").val()), 
 	    tag: $('#tag').val().split(' '),
 	    creator: USERNAME,
+	    host: $("#orgs").val(),
         };
         return data;
     }

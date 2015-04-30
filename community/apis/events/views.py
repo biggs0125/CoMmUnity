@@ -1,11 +1,13 @@
 from django.views.generic import View
 from events.models import Event
 from tags.models import Tag
+from users.models import OurUser
 from datetime import datetime
 from django.core import serializers
 from organizations.models import Organization
 from django.core.exceptions import ObjectDoesNotExist
 from apis.CORSHttp import CORSHttpResponse
+from slugify import slugify
 
 
 class CreateEvent(View):
@@ -40,7 +42,8 @@ class CreateEvent(View):
             return CORSHttpResponse(status=400)
 
         try:
-            org_tag = Tag.objects.get(name=self.organization)
+            self.org_tag = slugify(self.organization, separator="_")
+            org_tag = Tag.objects.get(name=self.org_tag)
         except ObjectDoesNotExist:
             return CORSHttpResponse(status=500)
 
@@ -123,3 +126,21 @@ class GetEvent(View):
 
         serialized_event = serializers.serialize("json", event)
         return CORSHttpResponse(status=200, content=serialized_event, content_type="application/json")
+
+class AddAttendee(View):
+    
+    def dispatch(self, request, *args, **kwargs):
+
+        if not request.method == 'POST':
+            return CORSHttpResponse(status=403)
+
+        if 'event' in request.POST.keys() and 'username' in request.POST.keys():
+            try:
+                user = OurUser.objects.get(username=request.POST['username'])
+                event = Event.objects.get(pk=request.POST['event'])
+            except ObjectDoesNotExist:
+                return CORSHttpResponse(status=404)
+        
+        event.attendees.add(user)
+        event.save()
+        return CORSHttpResponse(status=200)

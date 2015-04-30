@@ -1,5 +1,14 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% block content %}
+  <script src={% static "home/home.js" %}></script>
   <h1> Welcome to CoMmUnity! </h1>
+  {% if request.session.user %}
+  <div class="content-area">
+  <h2> Events you're attending </h2>
+  <ul id="events_attending">
+  </ul>
+  {% endif %}
+  
 {% endblock %}

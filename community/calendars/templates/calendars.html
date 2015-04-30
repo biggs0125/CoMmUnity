@@ -4,8 +4,12 @@
 {% block content %}
   <link rel="stylesheet" type="text/css" href="{% static "calendars/fullcalendar.min.css" %}">
   <link rel="stylesheet" type="text/css" href="{% static "calendars/calendar.css" %}">
+  <link rel="stylesheet" type="text/css" href="{% static "chosen/chosen.min.css" %}">
+
+  <script src="{% static "chosen/chosen.jquery.min.js" %}"></script>
   <script src="{% static "calendars/fullcalendar.min.js" %}"></script>
   <script src="{% static "calendars/calendar.js" %}"></script>
+
   <!-- Calendar Row -->
   <div class="row" id="calendar_area">
     <div class="col-md-11" id="filter_name">

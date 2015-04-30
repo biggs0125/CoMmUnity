@@ -41,26 +41,25 @@ $(document).ready(function() {
     // Print the event description that goes in the tooltip
     function printDesc(event, desc, callback) {
         desc = "Description: "+event['description']+"<br>"+
-               "Start: "+moment(event['start']).format("LL h:MM")+"<br>"+
-               "End: "+moment(event['end']).format("LL h:MM")+"<br>"+
+               "Start: "+moment(event['start']).format("LL h:mm")+"<br>"+
+               "End: "+moment(event['end']).format("LL h:mm")+"<br>"+
                "Tags: ";
         getTagNames(event, desc, callback);
     }
-
+    
     // Apply chosen
     $("#filter").chosen();
 
     // Get all the tags
-    var tagArr;
     $.ajax({
         url: "http://localhost:8000/api/tag/retrieve",
         method: "GET",
         data: { },
         success: function (events) {
             for (var i = 0; i < events.length; i++) {
-                tagArr[i] = events[i]['fields']['name'];
-                $("#filter").append("<option value='" + tagArr[i]
-                  + "'>" + tagArr[i] + "</option>");
+                var name = events[i]['fields']['name'];
+                $("#filter").append("<option value='" + name
+                  + "'>" + name + "</option>");
                 $("#filter").trigger("chosen:updated");
             }
         },
@@ -76,9 +75,11 @@ $(document).ready(function() {
             type: 'GET',
 	    success: function(events) {
 		for (var i = 0; i < events.length; i++) {
+		    var id = events[i]['pk'];
 		    events[i] = events[i]['fields'];
 		    events[i]['start'] = events[i]['start_datetime'];
 		    events[i]['end'] = events[i]['end_datetime'];
+		    events[i]['id'] = id;
 		}
 	    },
             error: function() {
@@ -89,13 +90,12 @@ $(document).ready(function() {
 	    endParam: 'end_date'
 	},
 	eventRender: function(event, element) {
-	    //console.log(event); 
             var desc;
             printDesc(event, desc, function(event, desc, tags) {
 
 	        $(element).append(event['name']);
                 $(element).attr('tag', '');
-                
+                $(element).attr('event_id', event['id']);
                 var tagFound = false;
                 for (var i = 0; i < tags.length; i++) {
 
@@ -127,7 +127,22 @@ $(document).ready(function() {
 	    center: '',
 	    right: 'today prev,next month,agendaWeek,agendaDay'
 	},
-        height: "auto"
+
+	height: "auto",
+	
+	eventClick: function(calEvent, jsEvent, view) {
+	    if(confirm("Are you attending?")) {
+		$.ajax({
+		    method: 'POST',
+		    url: "http://localhost:8000/api/event/add_attendee",
+		    data: {username: USERNAME,
+			   event: calEvent['id']},
+		    error: function() {
+			alert("There was a problem confirming your attendance, please try again later.");
+		    }
+		});
+	    }
+	}
     })
 
     $("#filter_button").click(function() {

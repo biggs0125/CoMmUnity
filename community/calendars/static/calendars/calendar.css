@@ -1,5 +1,8 @@
 .calendar-bg {
-  background-color: #ccc;
-  opacity: 0.85;
+    background-color: #ccc;
+    opacity: 0.85;
 }
 
+.fc-week {
+    min-height: 100px !important;
+}
