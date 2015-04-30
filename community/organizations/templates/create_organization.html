@@ -2,9 +2,7 @@
 
 {% load staticfiles %}
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{% static "events/jquery.timepicker.css" %}">
-<script type="text/javascript" src="{% static "events/create_event.js" %}"></script>
-<script type="text/javascript" src="{% static "events/jquery.timepicker.min.js" %}"></script>
+<script type="text/javascript" src="{% static "organizations/create_organization.js" %}"></script>
 <div class="center content-area">
   <div class="title">
     CREATE AN ORGANIZATION
@@ -17,7 +15,7 @@
       Organization Name:
       </div>
       <div class="col-md-6">
-        <input id="event-name" type="text" class="form-control">
+        <input id="org-name" type="text" class="form-control">
       </div>
     </div>
     
