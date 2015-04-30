@@ -31,7 +31,7 @@ $(document).ready(function() {
                 desc += tagNames[tagNames.length-1]['fields']['name'];
                 callback(event, desc, tagNames); 
             },
-            rror: function() {
+            error: function() {
                 //alert("Bad tag IDs");
             }
         });
@@ -47,21 +47,8 @@ $(document).ready(function() {
         getTagNames(event, desc, callback);
     }
 
-
-    var uniqTags = new Array();
-    for (var i = 0; i < tags.length; i++) {
-      // Add all tags to the selector
-      uniqTags[i] = tags[i]['fields']['name']; 
-    }
-
-    uniqTags = $.unique(uniqTags);
-
-    for (var i = 0; i < uniqTags.length; i++) {
-      // Add all tags to the selector
-      $("#filter").append("<option value='" + tags[i]['fields']['name'] 
-          + "'>" + tags[i]['fields']['name'] + "</option>");
-      $("#filter").trigger("chosen:updated");
-    }
+    // Apply chosen
+    $("#filter").chosen();
 
     // Get all the tags
     var tagArr;
@@ -70,19 +57,16 @@ $(document).ready(function() {
         method: "GET",
         success: function (events) {
             for (var i = 0; i < events.length; i++) {
-                events[i] = events[i]['fields'];
-                events[i]['start'] = events[i]['start_datetime'];
-                events[i]['end'] = events[i]['end_datetime'];
+                tagArr[i] = events[i]['fields']['name'];
+                $("#filter").append("<option value='" + tagArr[i]
+                  + "'>" + tagArr[i] + "</option>");
+                $("#filter").trigger("chosen:updated");
             }
-            
         },
         error: function () {
-            alert("Cauldn't get tags");
+            console.log("Cauldn't get tags");
         },
     });
-
-    // Apply chosen
-    $("#filter").chosen();
 
     // Render the calendar
     $('#calendar').fullCalendar({

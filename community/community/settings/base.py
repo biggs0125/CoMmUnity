@@ -56,6 +56,7 @@ TEMPLATE_DIRS = (
 # Authentication
 
 LOGIN_URL = "/home/"
+LOGIN_REDIRECT_URL = "/home/"
 
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.google.GoogleOAuth2Backend',

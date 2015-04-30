@@ -26,6 +26,7 @@ $(document).ready(function() {
 
     // Create data to be sent in POST request
     function eventDataCreate() {
+	console.log(USERNAME);
         jQuery.ajaxSettings.traditional = true;
         var data = {
 	    name: $("#event-name").val(),
@@ -35,7 +36,8 @@ $(document).ready(function() {
 	    start_time: parseTime($("#start_time").val()), 
 	    end_date: moment($("#end_date").val()).format('YYYY-MM-DD'),
 	    end_time: parseTime($("#end_time").val()), 
-	    'tag': $('#tag').val().split(' '),
+	    tag: $('#tag').val().split(' '),
+	    creator: USERNAME,
         };
         return data;
     }
