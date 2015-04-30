@@ -1,6 +1,3 @@
 [submodule "community/community/static/bootstrap"]
 	path = community/community/static/bootstrap
 	url = https://github.com/twitter/bootstrap.git
-[submodule "community/community/static/jquery"]
-	path = community/community/static/jquery
-	url = git://github.com/jquery/jquery.git
