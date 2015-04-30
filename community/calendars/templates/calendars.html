@@ -8,21 +8,23 @@
   <script src="{% static "calendars/calendar.js" %}"></script>
   <!-- Calendar Row -->
   <div class="row" id="calendar_area">
-    <div class="col-md-12" id="filter_name">
-      <div class="row calendar-bg" id="calendar"></div>
+    <div class="col-md-11" id="filter_name">
+      <div class="row content-area" id="calendar"></div>
     </div>  
-  </div>  
-  <!-- Tag Filters Row -->
-  <div class="row calendar-bg" id="filter_area">
-    <div class="col-md-2" id="filter_name">
-      Filter by Tag:
-    </div>  
-    <div class="col-md-3" id="filter_name">
-      <input id="filter" type="text" class="form-control">
-    </div>  
-    <div class="col-md-4" id="filter_name">
-      <button id="filter_button" class="btn btn-primary pull-left" type="button"> Filter </button>
-    </div>  
+    <!-- Filter row -->
+    <div class="col-md-1" id="filter_area">
+
+      <div class="row" id="calendar_area">
+        <select id="filter" data-placeholder="Select Tag" style="width:150px">
+          <option value="">All</option>
+          <!-- Other options added dynamically -->
+        </select>
+      </div>  
+      <div class="row container-fluid" id="calendar_area">
+        <div class="col-md-1" id="filter_button_area" align="left">
+          <button id="filter_button" class="btn btn-primary pull-left" type="button"> Filter </button>
+        </div>  
+      </div>  
   </div>
 
 {% endblock %}

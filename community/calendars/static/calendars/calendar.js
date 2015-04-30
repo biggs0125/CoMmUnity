@@ -1,4 +1,5 @@
-cur_filt = '';
+cur_filt = ''; // Global to hold the current filter
+
 $(document).ready(function() {
 
     // Get the tag names via GET request and append them to
@@ -30,7 +31,7 @@ $(document).ready(function() {
                 desc += tagNames[tagNames.length-1]['fields']['name'];
                 callback(event, desc, tagNames); 
             },
-            error: function() {
+            rror: function() {
                 //alert("Bad tag IDs");
             }
         });
@@ -46,13 +47,50 @@ $(document).ready(function() {
         getTagNames(event, desc, callback);
     }
 
+
+    var uniqTags = new Array();
+    for (var i = 0; i < tags.length; i++) {
+      // Add all tags to the selector
+      uniqTags[i] = tags[i]['fields']['name']; 
+    }
+
+    uniqTags = $.unique(uniqTags);
+
+    for (var i = 0; i < uniqTags.length; i++) {
+      // Add all tags to the selector
+      $("#filter").append("<option value='" + tags[i]['fields']['name'] 
+          + "'>" + tags[i]['fields']['name'] + "</option>");
+      $("#filter").trigger("chosen:updated");
+    }
+
+    // Get all the tags
+    var tagArr;
+    $.ajax({
+        url: "http://localhost:8000/api/event/retrieve",
+        method: "GET",
+        success: function (events) {
+            for (var i = 0; i < events.length; i++) {
+                events[i] = events[i]['fields'];
+                events[i]['start'] = events[i]['start_datetime'];
+                events[i]['end'] = events[i]['end_datetime'];
+            }
+            
+        },
+        error: function () {
+            alert("Cauldn't get tags");
+        },
+    });
+
+    // Apply chosen
+    $("#filter").chosen();
+
     // Render the calendar
     $('#calendar').fullCalendar({
 	events: {
             url: 'http://localhost:8000/api/event/retrieve',
             type: 'GET',
 	    success: function(events) {
-		for (var i=0;i<events.length;i++) {
+		for (var i = 0; i < events.length; i++) {
 		    events[i] = events[i]['fields'];
 		    events[i]['start'] = events[i]['start_datetime'];
 		    events[i]['end'] = events[i]['end_datetime'];
@@ -69,21 +107,29 @@ $(document).ready(function() {
 	    //console.log(event); 
             var desc;
             printDesc(event, desc, function(event, desc, tags) {
+
 	        $(element).append(event['name']);
-                //console.log(tags);
                 $(element).attr('tag', '');
+                
                 var tagFound = false;
                 for (var i = 0; i < tags.length; i++) {
-                  $(element).attr('tag', $(element).attr('tag') + tags[i]['fields']['name'] + ' ');
-                  if (tags[i]['fields']['name'] == cur_filt || 
-                      cur_filt == '') {
-                      tagFound = true;
-                      //$(element).hide();
-                  }
+
+                    // Add tag attribute to element so we can reference tags later
+                    // for filtering
+                    $(element).attr('tag', $(element).attr('tag') + tags[i]['fields']['name'] + ' ');
+
+                    // Search for tags matching the current filter
+                    if (tags[i]['fields']['name'] == cur_filt || cur_filt == '') {
+                        tagFound = true;
+                    }
                 }
+
+                // Hide an event if it has no tags or is not
+                // the current tag
                 if (!tagFound && (tags.length != 0 || cur_filt != '')) {
                     $(element).hide();
                 }
+
 	        $(element).tooltip({
 		    html: true,
                     title: desc,
@@ -95,7 +141,8 @@ $(document).ready(function() {
 	    left: 'title',
 	    center: '',
 	    right: 'today prev,next month,agendaWeek,agendaDay'
-	}
+	},
+        height: "auto"
     })
 
     $("#filter_button").click(function() {
@@ -103,10 +150,9 @@ $(document).ready(function() {
         cur_filt = filt;
         $(".fc-event").hide(); // Hide all
         $.each($(".fc-event"), function(i, x) {
-          //console.log($(x).attr('tag').split(' ').indexOf(filt) >= 0); 
-          if ($(x).attr('tag').split(' ').indexOf(filt) >= 0) {
-              $(x).show(); // Show just the ones with the tags
-          }
+            if ($(x).attr('tag').split(' ').indexOf(filt) >= 0) {
+                $(x).show(); // Show just the ones with the tags
+            }
         });
     });
 });
