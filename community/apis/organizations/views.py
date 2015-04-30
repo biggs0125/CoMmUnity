@@ -1,6 +1,7 @@
 from django.views.generic import View
 from apis.CORSHttp import CORSHttpResponse
 from organizations.models import Organization
+from tags.models import Tag
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 from users.models import User
@@ -15,6 +16,9 @@ class CreateOrganization(View):
 
         self.name = request.POST['name']
         self.admins = request.POST.getlist('admin')
+
+
+        Tag.objects.get_or_create(name=self.name)
 
         try:
             admin_objects = [User.objects.get(username=admin_name) for admin_name in self.admins]
