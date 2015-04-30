@@ -1,5 +1,10 @@
 from django.views.generic import View
 from apis.CORSHttp import CORSHttpResponse
+from organizations.models import Organization
+from tags.models import Tag
+from django.core.exceptions import ObjectDoesNotExist
+from django.core import serializers
+from users.models import User
 
 
 class CreateOrganization(View):
@@ -9,7 +14,27 @@ class CreateOrganization(View):
         if not request.method == 'POST':
             return CORSHttpResponse(status=403)
 
-        return CORSHttpResponse(status=501)
+        self.name = request.POST['name']
+        self.admins = request.POST.getlist('admin')
+
+
+        Tag.objects.get_or_create(name=self.name)
+
+        try:
+            admin_objects = [User.objects.get(username=admin_name) for admin_name in self.admins]
+        except ObjectDoesNotExist:
+            # One or more of the Users given does not exist, HTTP 400 - bad request
+            return CORSHttpResponse(status=400)
+
+        org, created = Organization.objects.get_or_create(name=self.name)
+        if not created:
+            # Organization with name already exists, HTTP 409 - conflict
+            return CORSHttpResponse(status=409)
+
+        org.admins = admin_objects
+        org.save()
+
+        return CORSHttpResponse(status=200)
 
 class GetOrganizations(View):
 
@@ -18,7 +43,39 @@ class GetOrganizations(View):
         if not request.method == 'GET':
             return CORSHttpResponse(status=403)
 
-        return CORSHttpResponse(status=501)
+        if 'id' in request.GET:
+            try:
+                org = Organization.objects.filter(pk=request.GET['id'])
+            except ObjectDoesNotExist:
+                return CORSHttpResponse(status=400)
+            serialized_response = serializers.serialize("json", org)
+            return CORSHttpResponse(status=200, content=serialized_response, content_type="application/json")
+
+        elif 'name' in request.GET:
+            try:
+                org = Organization.objects.filter(name=request.GET['name'])
+            except ObjectDoesNotExist:
+                return CORSHttpResponse(status=400)
+            serialized_response = serializers.serialize("json", org)
+            return CORSHttpResponse(status=200, content=serialized_response, content_type="application/json")
+
+        elif 'admin' in request.GET:
+            try:
+                orgs = set()
+                for org in Organization.objects.all():
+                    for admin in org.admins.all():
+                        if request.GET['admin'] == admin.username:
+                            orgs.add(org)
+                orgs_as_list = list(orgs)
+            except ObjectDoesNotExist:
+                return CORSHttpResponse(status=400)
+            serialized_response = serializers.serialize("json", orgs_as_list)
+            return CORSHttpResponse(status=200, content=serialized_response, content_type="application/json")
+
+        else:
+            orgs = Organization.objects.all()
+            serialized_response = serializers.serialize("json", orgs)
+            return CORSHttpResponse(status=200, content=serialized_response, content_type="application/json")
 
 class AddAdmin(View):
 

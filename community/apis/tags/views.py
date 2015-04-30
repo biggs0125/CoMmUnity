@@ -14,6 +14,8 @@ class GetTag(View):
 
         if 'id' in request.GET:
             response = Tag.objects.filter(pk__in=request.GET.getlist('id')).distinct()
+        else:
+            response = Tag.objects.all()
 
         if response is None:
             return CORSHttpResponse(status=400)
