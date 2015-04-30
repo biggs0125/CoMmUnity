@@ -30,14 +30,14 @@
       <div class="row">
         <!-- Top Pill Menu -->
         <ul class="nav nav-pills pull-right col-md-2">
-          <li id="login"><a href={% url 'home' %}>Login</a></li>
-          <li id="logout"><a href="#">Logout</a></li>
+          {% if request.session.user_info %}
+	  <li id="welcome"><h4>Hello {{request.session.user_info.name}}</h4></li>
+	  <li id="logout"><a href={% url "logout" %}>Logout</a></li>
+	  {% else %}
+	  <li id="login"><a href={% url "socialauth_begin" "google-oauth2" %}>Login</a></li>
+	  {% endif %}
         </ul>
-        <!--<ul class="pull-right col-md-2">
-          <input id="username" type="text" class="form-control" placeholder="Username">
-        </ul>-->
       </div>
-
       <div class="row">
         <div class="col-md-3" id="menubar">
           <div class="center">
@@ -54,7 +54,7 @@
 
         <!-- The rest of the page to be filled -->
         <div class="col-md-8" id="content">
-          {% block content %}Whatever you want.{% endblock %}
+          {% block content %}{% endblock %}
         </div>
 
       </div>

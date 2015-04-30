@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^event/', include('events.urls')),
     url(r'^home/', include('home.urls')),
     url(r'^calendar/', include('calendars.urls')),
+    url(r'^login/', include('login.urls')),
+    url(r'', include('social_auth.urls'))
     url(r'^organization/', include('organizations.urls')),
-    url(r'', include('social.apps.django_app.urls', namespace='social'))
 )

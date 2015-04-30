@@ -1,9 +1,7 @@
 from django.db import models
 from tags.models import Tag
+from django.contrib.auth.models import User
 
-class User(models.Model):
+class OurUser(User):
 
-    username = models.CharField(max_length=15, unique=True)
     subscriptions = models.ManyToManyField(Tag)
-    REQUIRED_FIELDS = []
-    USERNAME_FIELD = 'username'
