@@ -17,7 +17,7 @@
       Event Name:
       </div>
       <div class="col-md-6">
-        <input id="event-name" type="text" class="form-control form-input">
+        <input id="event-name" type="text" class="form-control">
       </div>
     </div>
     
@@ -95,7 +95,7 @@
       Location:
       </div>
       <div class="col-md-6">
-        <input id="location" type="text" class="form-control form-input">
+        <input id="location" type='text' class="form-control">
       </div>
     </div>
 
@@ -104,23 +104,11 @@
       <div class="col-md-4">
       Tags:
       </div>
-      <div class="col-md-6">
-        <div class="dropdown form-input">
-          <button id="tags" class="btn btn-default dropdown-toggle" type="button"
-            data-toggle="dropdown">
-            Select Tags:
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" style="margin-top:10px;" role="menu">
-            <li><a tabindex="-1" href="#">Tag 1</a></li>
-            <li><a tabindex="-1" href="#">Tag 2</a></li>
-            <li role="presentation" class="divide"></li>
-            <li><a tabindex="-1" href="#">New...</a></li>
-          </ul>
-        </div>
+      <div class="col-md-8">
+        <input id="tag" type='text' class="form-control" placeholder="Enter tags separated by spaces">
       </div>
     </div>
-    <br>
+
     <!-- Description Row --> 
     <div class="row">
       <div class="col-md-4">

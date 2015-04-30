@@ -3,6 +3,8 @@ from events.models import Event
 from tags.models import Tag
 from datetime import datetime
 from django.core import serializers
+from organizations.models import Organization
+from django.core.exceptions import ObjectDoesNotExist
 from apis.CORSHttp import CORSHttpResponse
 
 
@@ -13,14 +15,34 @@ class CreateEvent(View):
         if not request.method == 'POST':
             return CORSHttpResponse(status=403)
 
+        self.creator = request.POST['creator']
         self.name = request.POST['name']
         self.start_date = request.POST['start_date']
         self.start_time = request.POST['start_time']
         self.end_date = request.POST['end_date']
         self.end_time = request.POST['end_time']
         self.location = request.POST['location']
+        self.organization = request.POST['host']
         self.description = request.POST['description']
         self.tags = request.POST.getlist('tag')
+
+        try:
+            org = Organization.objects.get(name=self.organization)
+        except ObjectDoesNotExist:
+            return CORSHttpResponse(status=400)
+
+        access_granted = False
+        for admin in org.admins.all():
+            if self.creator == admin.username:
+                access_granted = True
+
+        if not access_granted:
+            return CORSHttpResponse(status=400)
+
+        try:
+            org_tag = Tag.objects.get(name=self.organization)
+        except ObjectDoesNotExist:
+            return CORSHttpResponse(status=500)
 
         try:
             start_date_obj = datetime.strptime(self.start_date, '%Y-%m-%d')
@@ -32,6 +54,9 @@ class CreateEvent(View):
 
 
         tags_list = [Tag.objects.get_or_create(name=tag)[0] for tag in self.tags]
+        tags_list.append(org_tag)
+
+        hosts_list = [org]
 
         start_datetime_obj = datetime.combine(start_date_obj.date(), start_time_obj.time())
         end_datetime_obj = datetime.combine(end_date_obj.date(), end_time_obj.time())
@@ -44,6 +69,7 @@ class CreateEvent(View):
 
         event.save()
         event.tags = tags_list
+        event.hosts = hosts_list
         event.save()
         return CORSHttpResponse(status=200)
 

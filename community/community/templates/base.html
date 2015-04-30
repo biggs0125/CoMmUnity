@@ -23,7 +23,6 @@
       <div class="row">
         <!-- Top Pill Menu -->
         <ul class="nav nav-pills pull-right col-md-2">
-          <!-- <li id="login"><a href="/login/google-oauth2">Login</a></li> -->
           {% if request.session.user_info %}
 	  <li id="welcome"><h4>Hello {{request.session.user_info.name}}</h4></li>
 	  <li id="logout"><a href={% url "logout" %}>Logout</a></li>
@@ -32,7 +31,6 @@
 	  {% endif %}
         </ul>
       </div>
-
       <div class="row">
         <div class="col-md-3" id="menubar">
           <div class="center">
@@ -40,6 +38,9 @@
             <div class="menu-rectangle" id="home-button"><a href="/home">Home</a></div>
             <div class="menu-rectangle" id="events-button"><a href="/calendar">Upcoming Events</a></div>
             <div class="menu-rectangle" id="create-button"><a href="/event/create">Create an Event</a></div>
+            <div class="menu-rectable"
+            id="create-org-button"><a href="/organization/create">Create
+            an Organization</a></div>
             <div class="menu-rectangle" id="about-button">About Us</div>
           </div>
         </div>

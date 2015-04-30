@@ -1,4 +1,52 @@
+cur_filt = '';
 $(document).ready(function() {
+
+    // Get the tag names via GET request and append them to
+    // the description
+    function getTagNames(event, desc, callback) {
+
+        var tagIds = event['tags'];
+
+        // If there are no tags, don't make a request to the server
+        if (tagIds.length == 0) {
+            desc += 'None';
+            callback(event, desc, []);
+            return;
+        }
+
+        // Send GET request
+        jQuery.ajaxSettings.traditional = true;
+        $.ajax({
+            url: "http://localhost:8000/api/tag/retrieve",
+            method: "GET",
+            data: {
+                id: tagIds
+            },
+            success: function (tagNames) {
+                // Append the tag names to description
+                for (var i = 0; i < tagNames.length-1; i++) {
+                    desc += tagNames[i]['fields']['name'] + ", ";
+                }
+                desc += tagNames[tagNames.length-1]['fields']['name'];
+                callback(event, desc, tagNames); 
+            },
+            error: function() {
+                //alert("Bad tag IDs");
+            }
+        });
+
+    }
+
+    // Print the event description that goes in the tooltip
+    function printDesc(event, desc, callback) {
+        desc = "Description: "+event['description']+"<br>"+
+               "Start: "+moment(event['start']).format("LL h:MM")+"<br>"+
+               "End: "+moment(event['end']).format("LL h:MM")+"<br>"+
+               "Tags: ";
+        getTagNames(event, desc, callback);
+    }
+
+    // Render the calendar
     $('#calendar').fullCalendar({
 	events: {
             url: 'http://localhost:8000/api/event/retrieve',
@@ -18,13 +66,30 @@ $(document).ready(function() {
 	    endParam: 'end_date'
 	},
 	eventRender: function(event, element) {
-	    
-	    $(element).append(event['name']);
-	    $(element).tooltip({
-		html: true,
-		title: "Description: "+event['description']+"<br>"+"Start: "+moment(event['start']).format("LL h:MM")+"<br>"+"End: "+moment(event['end']).format("LL h:MM"),
-		trigger: 'hover'
-	    });
+	    //console.log(event); 
+            var desc;
+            printDesc(event, desc, function(event, desc, tags) {
+	        $(element).append(event['name']);
+                //console.log(tags);
+                $(element).attr('tag', '');
+                var tagFound = false;
+                for (var i = 0; i < tags.length; i++) {
+                  $(element).attr('tag', $(element).attr('tag') + tags[i]['fields']['name'] + ' ');
+                  if (tags[i]['fields']['name'] == cur_filt || 
+                      cur_filt == '') {
+                      tagFound = true;
+                      //$(element).hide();
+                  }
+                }
+                if (!tagFound && (tags.length != 0 || cur_filt != '')) {
+                    $(element).hide();
+                }
+	        $(element).tooltip({
+		    html: true,
+                    title: desc,
+		    trigger: 'hover'
+	        });
+            });
 	},
 	header: {
 	    left: 'title',
@@ -32,4 +97,16 @@ $(document).ready(function() {
 	    right: 'today prev,next month,agendaWeek,agendaDay'
 	}
     })
+
+    $("#filter_button").click(function() {
+	var filt = $("#filter").val();
+        cur_filt = filt;
+        $(".fc-event").hide(); // Hide all
+        $.each($(".fc-event"), function(i, x) {
+          //console.log($(x).attr('tag').split(' ').indexOf(filt) >= 0); 
+          if ($(x).attr('tag').split(' ').indexOf(filt) >= 0) {
+              $(x).show(); // Show just the ones with the tags
+          }
+        });
+    });
 });
