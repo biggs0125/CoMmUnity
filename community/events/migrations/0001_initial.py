@@ -7,6 +7,9 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('users', '0001_initial'),
+        ('tags', '__first__'),
+        ('organizations', '__first__'),
     ]
 
     operations = [
@@ -19,6 +22,9 @@ class Migration(migrations.Migration):
                 ('start_datetime', models.DateTimeField(null=True)),
                 ('end_datetime', models.DateTimeField(null=True)),
                 ('location', models.CharField(max_length=60)),
+                ('attendees', models.ManyToManyField(to='users.OurUser')),
+                ('hosts', models.ManyToManyField(to='organizations.Organization')),
+                ('tags', models.ManyToManyField(to='tags.Tag')),
             ],
             options={
             },

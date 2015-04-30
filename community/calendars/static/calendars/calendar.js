@@ -53,8 +53,9 @@ $(document).ready(function() {
     // Get all the tags
     var tagArr;
     $.ajax({
-        url: "http://localhost:8000/api/event/retrieve",
+        url: "http://localhost:8000/api/tag/retrieve",
         method: "GET",
+        data: { },
         success: function (events) {
             for (var i = 0; i < events.length; i++) {
                 tagArr[i] = events[i]['fields']['name'];
