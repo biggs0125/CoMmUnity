@@ -41,7 +41,6 @@ $(document).ready(function() {
 
     // Create data to be sent in POST request
     function eventDataCreate() {
-	console.log(USERNAME);
         jQuery.ajaxSettings.traditional = true;
         var data = {
 	    name: $("#event-name").val(),

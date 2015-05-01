@@ -31,9 +31,6 @@ $(document).ready(function() {
                 desc += tagNames[tagNames.length-1]['fields']['name'];
                 callback(event, desc, tagNames); 
             },
-            error: function() {
-                //alert("Bad tag IDs");
-            }
         });
 
     }
@@ -63,9 +60,6 @@ $(document).ready(function() {
                 $("#filter").trigger("chosen:updated");
             }
         },
-        error: function () {
-            console.log("Cauldn't get tags");
-        },
     });
 
     // Render the calendar
@@ -92,7 +86,6 @@ $(document).ready(function() {
 	eventRender: function(event, element) {
             var desc;
             printDesc(event, desc, function(event, desc, tags) {
-
 	        $(element).append(event['name']);
                 $(element).attr('tag', '');
                 $(element).attr('event_id', event['id']);

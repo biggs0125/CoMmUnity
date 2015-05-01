@@ -1,0 +1,16 @@
+.vcenter {
+    display: inline;
+    vertical-align: middle;
+    float: none;
+}
+
+.middle {
+    text-align: center;
+    display: inline-block;
+}
+
+.chosen-choices {
+    border-width: 2px !important;
+    border-color: darkgray !important;
+}
+

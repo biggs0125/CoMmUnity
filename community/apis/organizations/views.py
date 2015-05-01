@@ -18,7 +18,7 @@ class CreateOrganization(View):
         self.name = request.POST['name']
         self.admins = request.POST.getlist('admins')
         self.tagname = slugify(self.name, separator="_")
-        Tag.objects.get_or_create(name=self.tagname)
+        tag, create = Tag.objects.get_or_create(name=self.tagname, is_org_tag=True)
         admin_objects = []
         try:
             for admin_name in self.admins:
@@ -28,7 +28,7 @@ class CreateOrganization(View):
             # One or more of the Users given does not exist, HTTP 400 - bad request
             return CORSHttpResponse(status=400)
 
-        org, created = Organization.objects.get_or_create(name=self.name)
+        org, created = Organization.objects.get_or_create(name=self.name, org_tag=tag)
         if not created:
             # Organization with name already exists, HTTP 409 - conflict
             return CORSHttpResponse(status=409)

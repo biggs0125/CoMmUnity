@@ -1,7 +1,12 @@
 from django.views.generic import View
 from tags.models import Tag
+from organizations.models import Organization
 from django.core import serializers
 from apis.CORSHttp import CORSHttpResponse
+from django.db.models import Q
+from django.http import JsonResponse
+from django.core.serializers.json import DjangoJSONEncoder
+import json
 
 class GetTag(View):
 
@@ -20,5 +25,6 @@ class GetTag(View):
         if response is None:
             return CORSHttpResponse(status=400)
 
-        serialized_response = serializers.serialize("json", response)
+        
+        serialized_response = serializers.serialize('json', response)
         return CORSHttpResponse(status=200, content=serialized_response, content_type="application/json")

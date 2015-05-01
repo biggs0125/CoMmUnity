@@ -6,7 +6,7 @@ from django.core import serializers
 from apis.CORSHttp import CORSHttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
-
+from slugify import slugify
 
 class GetUser(View):
 
@@ -30,7 +30,11 @@ class AddSubscriptions(View):
         if not request.method == 'POST':
             return CORSHttpResponse(status=404)
 
-        self.username = request.POST['username']
+        if 'username' in request.POST:
+            self.username = request.POST['username']
+        else:
+            return CORSHttpResponse(status=400)
+            
         self.tags = request.POST.getlist('tag')
 
         try:
@@ -41,7 +45,7 @@ class AddSubscriptions(View):
         tag_objs = []
         for tag in self.tags:
             try:
-                tag_objs.append(Tag.objects.get(name=tag))
+                tag_objs.append(Tag.objects.get(name=slugify(tag, separator="_")))
             except ObjectDoesNotExist:
                 return CORSHttpResponse(status=404)
 

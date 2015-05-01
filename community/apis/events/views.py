@@ -9,7 +9,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from apis.CORSHttp import CORSHttpResponse
 from slugify import slugify
 
-
 class CreateEvent(View):
 
     def dispatch(self, request, *args, **kwargs):
@@ -42,8 +41,8 @@ class CreateEvent(View):
             return CORSHttpResponse(status=400)
 
         try:
-            self.org_tag = slugify(self.organization, separator="_")
-            org_tag = Tag.objects.get(name=self.org_tag)
+            org = Organization.objects.get(name=self.organization)
+            org_tag = org.org_tag
         except ObjectDoesNotExist:
             return CORSHttpResponse(status=500)
 
@@ -56,7 +55,7 @@ class CreateEvent(View):
             return CORSHttpResponse(status=400)
 
 
-        tags_list = [Tag.objects.get_or_create(name=tag)[0] for tag in self.tags]
+        tags_list = [Tag.objects.get_or_create(name=slugify(tag, separator="_"))[0] for tag in self.tags]
         tags_list.append(org_tag)
 
         hosts_list = [org]

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static "chosen/chosen.min.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "tags/subscribe.css" %}">
+
+<script src="{% static "chosen/chosen.jquery.min.js" %}"></script>
+<script src="{% static "tags/subscribe.js" %}"></script>
+<div class="center content-area">
+  <div class="title">
+    SUBSCRIBE TO TAGS
+  </div>
+  <div class="row vcenter">
+    <select class="chosen-select" id="selecter" data-placeholder="Choose what you want to subscribe to" multiple>
+      <optgroup label="organizations" id="orgs"></optgroup>
+      <optgroup label="tags" id="tags"></optgroup>
+      </select>
+  </div>
+  <div class="row vcenter center">
+    <div id="submit" class="submit-rectangle middle">Submit</div>
+  </div>
+</div>
+
+{% endblock %}
