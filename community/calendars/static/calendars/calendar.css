@@ -6,3 +6,21 @@
 .fc-week {
     min-height: 100px !important;
 }
+
+#calendar {
+    padding: 5px 5px 5px 5px;
+}
+
+.fc-event {
+    background-color: lightgray;
+}
+
+.attend {
+    color: green;
+    display: inline;
+}
+
+.unattend {
+    color: red;
+    display: inline;
+}

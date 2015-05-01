@@ -2,6 +2,57 @@ cur_filt = ''; // Global to hold the current filter
 
 $(document).ready(function() {
 
+    function handleAttend(event, element) {
+	if(event.attending) {
+	    if (typeof USERNAME != 'undefined') {
+		$(element).find(".unattend").remove();
+		var unat = $("<div class='unattend' event_id="+event['id']+"><span class='glyphicon glyphicon-remove' aria-hidden='true'></span><span>unattend?</span></div>");
+		unat.click(function(e) {
+		    var id = $(e.currentTarget).attr('event_id');
+		    if(typeof USERNAME != 'undefined' && confirm("Cancel attendance?")) {
+			$.ajax({
+			    method: 'POST',
+			    url: "http://localhost:8000/api/event/unattend",
+			    data: {username: USERNAME,
+				   event: id},
+			    success: function() {
+				window.location.pathname = "/calendar";
+			    },
+			    error: function() {
+				alert("There was a problem confirming your attendance, please try again later.");
+			    }
+			});
+		    }
+		});
+		$(element).append(unat);
+	    }
+	}
+	else {
+	    if (typeof USERNAME != 'undefined') {
+		$(element).find(".attend").remove();
+		var at = $("<div class='attend' event_id="+event['id']+"><span class='glyphicon glyphicon-ok' aria-hidden='true'></span><span>attend?</span></div>");
+		at.click(function(e) {
+		    var id = $(e.currentTarget).attr('event_id');
+		    if(confirm("Are you attending?")) {
+			$.ajax({
+			    method: 'POST',
+			    url: "http://localhost:8000/api/event/add_attendee",
+			    data: {username: USERNAME,
+				   event: id},
+			    success: function() {
+				window.location.pathname = "/calendar";
+			    },
+			    error: function() {
+				alert("There was a problem confirming your attendance, please try again later.");
+			    }
+			});
+		    }
+		});
+		$(element).append(at);
+	    }	    
+	}
+    }
+
     // Get the tag names via GET request and append them to
     // the description
     function getTagNames(event, desc, callback) {
@@ -67,14 +118,29 @@ $(document).ready(function() {
 	events: {
             url: 'http://localhost:8000/api/event/retrieve',
             type: 'GET',
-	    success: function(events) {
-		for (var i = 0; i < events.length; i++) {
-		    var id = events[i]['pk'];
-		    events[i] = events[i]['fields'];
-		    events[i]['start'] = events[i]['start_datetime'];
-		    events[i]['end'] = events[i]['end_datetime'];
-		    events[i]['id'] = id;
+	    data: ((typeof USERNAME) != 'undefined')?{username: USERNAME}:{},
+	    success: function(data) {
+		var a_events = JSON.parse(data['attending']);
+		var na_events = JSON.parse(data['not_attending']);
+		for (var i = 0; i < a_events.length; i++) {
+		    var id = a_events[i]['pk'];
+		    a_events[i] = a_events[i]['fields'];
+		    a_events[i]['start'] = a_events[i]['start_datetime'];
+		    a_events[i]['end'] = a_events[i]['end_datetime'];
+		    a_events[i]['id'] = id;
+		    a_events[i]['attending'] = true;
+		    a_events[i]['title'] = a_events[i]['name'];
 		}
+		for (var i = 0; i < na_events.length; i++) {
+		    var id = na_events[i]['pk'];
+		    na_events[i] = na_events[i]['fields'];
+		    na_events[i]['start'] = na_events[i]['start_datetime'];
+		    na_events[i]['end'] = na_events[i]['end_datetime'];
+		    na_events[i]['id'] = id;
+		    na_events[i]['attending'] = false;
+		    na_events[i]['title'] = na_events[i]['name'];
+		}
+		return a_events.concat(na_events);
 	    },
             error: function() {
 		alert('there was an error while fetching events!');
@@ -83,10 +149,13 @@ $(document).ready(function() {
 	    startParam: 'start_date',
 	    endParam: 'end_date'
 	},
+	eventAfterRender: function(event, element, view) {
+	    if (view.name == "month")
+		handleAttend(event, element);
+	},
 	eventRender: function(event, element) {
             var desc;
             printDesc(event, desc, function(event, desc, tags) {
-	        $(element).append(event['name']);
                 $(element).attr('tag', '');
                 $(element).attr('event_id', event['id']);
                 var tagFound = false;
@@ -123,22 +192,9 @@ $(document).ready(function() {
 
 	height: "auto",
 	
-	eventClick: function(calEvent, jsEvent, view) {
-	    if(confirm("Are you attending?")) {
-		$.ajax({
-		    method: 'POST',
-		    url: "http://localhost:8000/api/event/add_attendee",
-		    data: {username: USERNAME,
-			   event: calEvent['id']},
-		    error: function() {
-			alert("There was a problem confirming your attendance, please try again later.");
-		    }
-		});
-	    }
-	}
     })
 
-    $("#filter_button").click(function() {
+    $("#filter-button").click(function() {
 	var filt = $("#filter").val();
         cur_filt = filt;
         $(".fc-event").hide(); // Hide all
@@ -148,4 +204,9 @@ $(document).ready(function() {
             }
         });
     });
+
+    var filterArea = $("#filter-area");
+    filterArea.detach();
+    filterArea.insertAfter(".fc-left");
+
 });

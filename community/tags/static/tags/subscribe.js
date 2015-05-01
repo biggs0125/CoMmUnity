@@ -5,6 +5,7 @@ $(document).ready(function() {
     $.ajax({
 	method: "GET",
 	url: "http://localhost:8000/api/tag/retrieve",
+	data: {username: USERNAME},
 	success: function(tags) {
 	    for(var i=0; i<tags.length; i++) {
 		var tag = tags[i]['fields'];
@@ -36,6 +37,9 @@ $(document).ready(function() {
 	    data:{
 		username: USERNAME,
 		tag: $("#selecter").val(),
+	    },
+	    success: function() {
+		window.location.pathname = "/home";
 	    },
 	    error: function() {
 		alert("There was an error saving your subscriptions, try again later.");

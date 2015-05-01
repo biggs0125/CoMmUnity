@@ -68,7 +68,7 @@ body {
 .center {
     position: relative;
     width: 80%;
-    height: 600px;
+    height:700px;
     margin: 0 auto;
     top: 50%;
     transform: translateY(20%);

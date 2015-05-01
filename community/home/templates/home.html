@@ -2,14 +2,33 @@
 {% load staticfiles %}
 
 {% block content %}
-  <script src={% static "home/home.js" %}></script>
+  <link rel="stylesheet" type="text/css" href="{% static "home/home.css" %}">
+  
   {% if request.session.user %}
-  <div class="content-area">
-    <div class="title">
-      EVENTS YOU'RE ATTENDING
+  <script src={% static "home/home.js" %}></script>
+
+  <div id="logged-in">
+    <div id="at-area" class="content-area bot-pad">
+      <div class="title">
+	EVENTS YOU'RE ATTENDING
+      </div>
+      <ul id="events-attending">
+      </ul>
     </div>
-  <ul id="events_attending">
-  </ul>
+    <div id="sub-area" class="content-area bot-pad">
+      <div class="title">
+	EVENTS FROM SUBSCRIPTIONS
+      </div>
+      <ul id="subscribed-events">
+      </ul>
+    </div>
+  </div>
+  {% else %}
+  <div class="content-area" id="not-logged-in">
+    <div class="title">CoMmUnity</div>
+    <span class="welcome-text">Login using your andrewID to keep track of events you are attending, to create and subscribe to organizations and more.</span><br><br>
+    <span class="welcome-text">Click "Upcoming Events" to view the calendar without logging in.</span><br>
+  </div>
   {% endif %}
   
 {% endblock %}

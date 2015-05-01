@@ -7,7 +7,7 @@ from apis.CORSHttp import CORSHttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from slugify import slugify
-
+from datetime import datetime
 class GetUser(View):
 
     def dispatch(self, request, *args, **kwargs):
@@ -92,8 +92,7 @@ class GetAttending(View):
                 return CORSHttpResponse(status=404)
         else:
             return CORSHttpResponse(status=400)
-        
-        events = Event.objects.filter(attendees__id__exact=user.pk)
+        events = Event.objects.filter(attendees__id__exact=user.pk, end_datetime__gt=datetime.now())
         serialized_response = serializers.serialize("json", events)
 
         return CORSHttpResponse(status=200, content=serialized_response, content_type="application/json")

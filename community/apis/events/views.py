@@ -8,6 +8,7 @@ from organizations.models import Organization
 from django.core.exceptions import ObjectDoesNotExist
 from apis.CORSHttp import CORSHttpResponse
 from slugify import slugify
+from django.http import JsonResponse
 
 class CreateEvent(View):
 
@@ -68,10 +69,10 @@ class CreateEvent(View):
 
         event = Event(name=self.name, start_datetime=start_datetime_obj, end_datetime=end_datetime_obj,
                       description=self.description, location=self.location)
-
         event.save()
         event.tags = tags_list
         event.hosts = hosts_list
+        event.attendees = list(org.admins.all())
         event.save()
         return CORSHttpResponse(status=200)
 
@@ -110,7 +111,7 @@ class GetEvent(View):
 
         if 'tag' in qdict:
             return self.handle_tags(qdict.getlist('tag'))
-
+            
         return None
 
     def dispatch(self, request, *args, **kwargs):
@@ -118,13 +119,31 @@ class GetEvent(View):
         if not request.method == 'GET':
             return CORSHttpResponse(status=403)
 
-        event = self.handle_params(request.GET)
+        events = self.handle_params(request.GET)
 
-        if event is None:
+        attending = []
+        not_attending = []
+
+        if 'username' in request.GET:
+            try:
+                user = OurUser.objects.get(username=request.GET['username'])
+                for e in events:
+                    if user in e.attendees.all():
+                        attending.append(e)
+                    else:
+                        not_attending.append(e)
+            except ObjectDoesNotExist:
+                return CORSHttpResponse(status=404)
+        else:
+            not_attending = events
+
+        if events is None:
             return CORSHttpResponse(status=400)
-
-        serialized_event = serializers.serialize("json", event)
-        return CORSHttpResponse(status=200, content=serialized_event, content_type="application/json")
+        
+        serialized_attending = serializers.serialize("json", attending)
+        serialized_not_attending = serializers.serialize("json", not_attending)
+        json = JsonResponse({'attending': serialized_attending, 'not_attending': serialized_not_attending}, safe=False)
+        return CORSHttpResponse(status=200, content=json, content_type="application/json")
 
 class AddAttendee(View):
     
@@ -139,7 +158,54 @@ class AddAttendee(View):
                 event = Event.objects.get(pk=request.POST['event'])
             except ObjectDoesNotExist:
                 return CORSHttpResponse(status=404)
-        
+        else:
+            return CORSHttpResponse(status=400)
+
         event.attendees.add(user)
         event.save()
+        return CORSHttpResponse(status=200)
+
+class SubscribedEvents(View):
+    
+    def dispatch(self, request, *args, **kwargs):
+        if not request.method == 'GET':
+            return CORSHttpResponse(status=403)
+    
+        if 'username' in request.GET.keys():
+            try:
+                user = OurUser.objects.get(username=request.GET['username'])
+            except ObjectDoesNotExist:
+                return CORSHttpResponse(status=404)
+        else:
+            return CORSHttpResponse(status=400)
+        
+        tags = [tag.name for tag in user.subscriptions.all()]
+        events = []
+
+        for e in Event.objects.all():
+            for tag in e.tags.all():
+                if tag.name in tags:
+                   events.append(e)
+                   break
+        
+        serialized_event = serializers.serialize("json", events)
+        return CORSHttpResponse(status=200, content=serialized_event, content_type="application/json")
+
+class UnattendEvent(View):
+    
+    def dispatch(self, request, *args, **kwargs):
+        if not request.method == 'POST':
+            return CORSHttpResponse(status=403)
+    
+        if 'username' in request.POST.keys() and 'event' in request.POST.keys():
+            try:
+                user = OurUser.objects.get(username=request.POST['username'])
+                event = Event.objects.get(pk=request.POST['event'])
+                event.attendees.remove(user)
+                event.save()
+            except ObjectDoesNotExist:
+                return CORSHttpResponse(status=404)
+        else:
+            return CORSHttpResponse(status=400)
+
         return CORSHttpResponse(status=200)

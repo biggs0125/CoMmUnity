@@ -29,7 +29,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    'apis',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,7 +42,9 @@ INSTALLED_APPS = (
     'organizations',
     'tags',
     'users',
-    'login'
+    'login',
+    'apis',
+    'about'
 )
 
 STATICFILES_DIRS = (

@@ -11,23 +11,18 @@
   <script src="{% static "calendars/calendar.js" %}"></script>
 
   <!-- Calendar Row -->
-  <div class="row" id="calendar_area">
+  <div class="row" id="calendar-area">
     <div class="col-md-11" id="filter_name">
       <div class="row content-area" id="calendar"></div>
     </div>  
     <!-- Filter row -->
-    <div class="col-md-1" id="filter_area">
-
-      <div class="row" id="calendar_area">
-        <select id="filter" data-placeholder="Select Tag" style="width:150px">
-          <option value="">All</option>
-          <!-- Other options added dynamically -->
+    <div id="filter-area">
+      <select id="filter" data-placeholder="Select Tag" style="width:150px">
+        <option value="">All</option>
+        <!-- Other options added dynamically -->
         </select>
-      </div>  
-      <div class="row container-fluid" id="calendar_area">
-        <div class="col-md-1" id="filter_button_area" align="left">
-          <button id="filter_button" class="btn btn-primary pull-left" type="button"> Filter </button>
-        </div>  
+      <div id="filter-button-area">
+        <button id="filter-button" class="btn btn-primary pull-left" type="button"> Filter </button>
       </div>  
   </div>
 

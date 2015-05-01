@@ -14,5 +14,6 @@ urlpatterns = patterns('',
     url(r'^login/', include('login.urls')),
     url(r'^organization/', include('organizations.urls')),
     url(r'^tags/', include('tags.urls')),
+    url(r'^about/', include('about.urls')),
     url(r'', include('social_auth.urls')),
 )
