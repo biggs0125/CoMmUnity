@@ -3,10 +3,11 @@
 
 {% block content %}
   <script src={% static "home/home.js" %}></script>
-  <h1> Welcome to CoMmUnity! </h1>
   {% if request.session.user %}
   <div class="content-area">
-  <h2> Events you're attending </h2>
+    <div class="title">
+      EVENTS YOU'RE ATTENDING
+    </div>
   <ul id="events_attending">
   </ul>
   {% endif %}
