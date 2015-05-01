@@ -15,8 +15,8 @@ $(document).ready(function() {
 		}
 		tags += tagNames[tagNames.length-1]['fields']['name'];
 		var eventstuff = "<div class='attending'><ul class='attending-description'><li>Description: "+event.description+"</li><li>Start: "+
-		    moment(event.start_datetime).format("LL h:mm")+"</li><li>End: "+
-		    moment(event.end_datetime).format("LL h:mm")+"</li><li>Tags: "+
+		    moment(event.start_datetime).format("LL h:mm A")+"</li><li>End: "+
+		    moment(event.end_datetime).format("LL h:mm A")+"</li><li>Tags: "+
 		    tags + "</li></ul></div>"
 		var eventname = "<li><b class='event-title'>"+event['name']+"</b>"+eventstuff+"</li>";
 		target.append(eventname);

@@ -89,8 +89,8 @@ $(document).ready(function() {
     // Print the event description that goes in the tooltip
     function printDesc(event, desc, callback) {
         desc = "Description: "+event['description']+"<br>"+
-               "Start: "+moment(event['start']).format("LL h:mm")+"<br>"+
-               "End: "+moment(event['end']).format("LL h:mm")+"<br>"+
+               "Start: "+moment(event['start']).format("LL h:mm A")+"<br>"+
+               "End: "+moment(event['end']).format("LL h:mm A")+"<br>"+
                "Tags: ";
         getTagNames(event, desc, callback);
     }
